@@ -8,4 +8,7 @@ export const AppRoutes = {
     },
     register: "/register",
   },
+  patient: {
+    home: "/patient/home",
+  },
 } as const;

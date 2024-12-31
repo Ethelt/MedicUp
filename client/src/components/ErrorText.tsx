@@ -3,9 +3,11 @@ import { ValidationError } from "@tanstack/react-form";
 
 export const ErrorText = ({ errors }: { errors: ValidationError[] }) => {
   return (
-    <Box mt={1}>
+    <Box mt={0.5} mb={1}>
       {errors.length ? (
-        <Typography color="error">{errors.join(", ")}</Typography>
+        <Typography fontSize={14} color="error">
+          {errors.join(", ")}
+        </Typography>
       ) : (
         // Invisible placeholder to avoid layout shift
         <Typography visibility="hidden">X</Typography>
