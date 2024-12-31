@@ -5,6 +5,8 @@ import { GeneratedAlways } from "kysely";
 export interface DatabaseSchema {
   patient: PatientTable;
   registrar: RegistrarTable;
+  doctor: DoctorTable;
+  visit: VisitTable;
 }
 
 interface PatientTable {
@@ -26,4 +28,24 @@ interface RegistrarTable {
   password: string;
   createdAt: GeneratedAlways<Date>;
   deactivatedAt: ColumnType<Date | null, Date | null, never>;
+}
+
+interface DoctorTable {
+  id: GeneratedAlways<number>;
+  login: string;
+  firstName: string;
+  lastName: string;
+  password: string;
+  createdAt: GeneratedAlways<Date>;
+  deactivatedAt: ColumnType<Date | null, Date | null, never>;
+}
+
+interface VisitTable {
+  id: GeneratedAlways<number>;
+  patientId: number;
+  doctorId: number;
+  startAt: Date;
+  endAt: Date;
+  cancelledAt: ColumnType<Date | null, Date | null, never>;
+  createdAt: GeneratedAlways<Date>;
 }
