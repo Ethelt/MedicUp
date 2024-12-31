@@ -1,12 +1,12 @@
 import { ApiRoutes } from "@medicup/shared";
 import { Express, NextFunction, Request, Response } from "express";
 import { ApiError } from "../utils/errors";
-import { AuthRouter } from "./auth/auth.router";
+import { AuthController } from "./auth/auth.controller";
 
-export class Router {
+export class Controller {
   static registerRoutes(app: Express) {
     this.registerDefaultRoutes(app);
-    AuthRouter.registerRoutes(app);
+    AuthController.registerRoutes(app);
     this.registerErrorHandlers(app);
   }
 

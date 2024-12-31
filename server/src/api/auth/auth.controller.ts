@@ -2,7 +2,7 @@ import { ApiRoutes } from "@medicup/shared";
 import { Express, Request, Response } from "express";
 import { AuthService } from "./auth.service";
 
-export class AuthRouter {
+export class AuthController {
   static registerRoutes(app: Express): void {
     app.post(ApiRoutes.auth.loginPatient, this.loginPatient);
     app.post(ApiRoutes.auth.loginDoctor, this.loginDoctor);

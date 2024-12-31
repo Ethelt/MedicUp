@@ -2,7 +2,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import express, { Express } from "express";
 import session from "express-session";
-import { Router } from "./api/router";
+import { Controller } from "./api/controller";
 
 dotenv.config();
 
@@ -28,7 +28,7 @@ declare module "express-session" {
 }
 
 // Routes
-Router.registerRoutes(app);
+Controller.registerRoutes(app);
 
 // Start server
 app.listen(port, () => {
