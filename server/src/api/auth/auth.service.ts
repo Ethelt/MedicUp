@@ -1,15 +1,67 @@
+import { Patient } from "@medicup/shared";
+
 import {
+  PatientLoginRequestDto,
+  PatientLoginResponseDto,
   PatientRegisterErrorDto,
   PatientRegisterRequestDto,
   PatientRegisterResponseDto,
 } from "@medicup/shared";
 import bcrypt from "bcrypt";
+import { Session } from "express-session";
+import { Selectable } from "kysely";
 import { Database } from "../../database/database";
+import { DatabaseSchema } from "../../database/db-schema";
 import { ApiError } from "../../utils/errors";
 
 export class AuthService {
-  static async loginPatient(): Promise<string> {
-    return "Patient login successful";
+  static async loginPatient(
+    loginRequestDto: PatientLoginRequestDto,
+    session: Session
+  ): Promise<PatientLoginResponseDto> {
+    const db = Database.getInstance();
+
+    // Find patient with matching email
+    const patient = await db
+      .selectFrom("patient")
+      .selectAll()
+      .where("email", "=", loginRequestDto.email)
+      .executeTakeFirst();
+
+    if (!patient) {
+      throw new ApiError({
+        message: "Invalid email or password",
+      });
+    }
+
+    if (patient.deactivatedAt) {
+      throw new ApiError({
+        message: "Account deactivated",
+      });
+    }
+
+    // Verify password
+    const passwordMatch = await bcrypt.compare(
+      loginRequestDto.password,
+      patient.password
+    );
+    if (!passwordMatch) {
+      throw new ApiError({
+        message: "Invalid email or password",
+      });
+    }
+
+    // Set session data
+    if (!session) {
+      throw new Error("No session available");
+    }
+
+    session.userId = patient.id;
+    session.userType = "patient";
+
+    return {
+      patient: this.removePatientSensitiveData(patient),
+    };
   }
 
   static async loginDoctor(): Promise<string> {
@@ -21,7 +73,8 @@ export class AuthService {
   }
 
   static async registerPatient(
-    data: PatientRegisterRequestDto
+    data: PatientRegisterRequestDto,
+    session: Session
   ): Promise<PatientRegisterResponseDto> {
     const db = Database.getInstance();
 
@@ -101,13 +154,21 @@ export class AuthService {
       throw new Error("Failed to create patient");
     }
 
-    // Remove sensitive data before returning
-    const { password: _, ...patientWithoutPassword } = patient;
-
-    return { patient: patientWithoutPassword };
+    // Login patient
+    return this.loginPatient(
+      { email: data.email, password: data.password },
+      session
+    );
   }
 
   static async logout(): Promise<string> {
     return "Logout successful";
+  }
+
+  private static removePatientSensitiveData(
+    patient: Selectable<DatabaseSchema["patient"]>
+  ): Patient {
+    const { password: _, ...patientWithoutPassword } = patient;
+    return patientWithoutPassword;
   }
 }

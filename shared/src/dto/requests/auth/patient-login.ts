@@ -5,9 +5,4 @@ export type PatientLoginRequestDto = {
   password: string;
 };
 
-export type PatientLoginResponseDto =
-  | {
-      ok: true;
-      patient: Patient;
-    }
-  | { ok: false; error: string };
+export type PatientLoginResponseDto = { patient: Patient };

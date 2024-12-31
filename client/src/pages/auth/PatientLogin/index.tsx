@@ -21,8 +21,8 @@ export default function PatientLogin() {
 
   const form = useForm<PatientLoginForm>({
     defaultValues: {
-      email: "",
-      password: "",
+      email: "bartek@test.com",
+      password: "Test1234!",
     },
     onSubmit: async (values) => {
       const response = await Api.post<
@@ -31,10 +31,10 @@ export default function PatientLogin() {
       >(ApiRoutes.auth.loginPatient, values.value);
 
       if (response.ok) {
-        console.log("succ", response.data);
         navigate(AppRoutes.patient.home);
       } else {
-        console.log("err", response.error);
+        console.log("Error", response.error);
+        // @TODO: error handling
       }
     },
   });

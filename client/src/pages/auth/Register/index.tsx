@@ -8,8 +8,10 @@ import {
 import { LoadingButton } from "@mui/lab";
 import { Stack, TextField, Typography } from "@mui/material";
 import { useForm } from "@tanstack/react-form";
+import { useNavigate } from "react-router";
 import { Api } from "../../../api";
 import { ErrorText } from "../../../components/ErrorText";
+import { AppRoutes } from "../../../constants/AppRoutes";
 
 type RegisterForm = {
   email: string;
@@ -24,6 +26,8 @@ type RegisterForm = {
 };
 
 export default function Register() {
+  const navigate = useNavigate();
+
   const form = useForm<RegisterForm>({
     defaultValues: {
       email: "bartek@test.com",
@@ -71,6 +75,7 @@ export default function Register() {
 
       if (response.ok) {
         console.log("Success", response.data);
+        navigate(AppRoutes.patient.home);
       } else {
         if ("message" in response.error) {
           console.log("Error", response.error.message);

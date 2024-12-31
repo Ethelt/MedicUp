@@ -15,8 +15,8 @@ export class AuthRouter {
     req: Request,
     res: Response
   ): Promise<void> {
-    const result = await AuthService.loginPatient();
-    res.json({ message: result });
+    const result = await AuthService.loginPatient(req.body, req.session);
+    res.json(result);
   }
 
   private static async loginDoctor(req: Request, res: Response): Promise<void> {
@@ -36,7 +36,7 @@ export class AuthRouter {
     req: Request,
     res: Response
   ): Promise<void> {
-    const result = await AuthService.registerPatient(req.body);
+    const result = await AuthService.registerPatient(req.body, req.session);
     res.json(result);
   }
 
