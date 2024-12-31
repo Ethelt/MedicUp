@@ -15,9 +15,18 @@ export type PatientRegisterRequestDto = {
     }
 );
 
-export type PatientRegisterResponseDto =
+export type PatientRegisterResponseDto = { patient: Patient };
+
+export type PatientRegisterErrorDto =
   | {
-      ok: true;
-      patient: Patient;
+      email: string;
     }
-  | { ok: false; error: string };
+  | {
+      phoneNumber: string;
+    }
+  | {
+      passportNumber: string;
+    }
+  | {
+      pesel: string;
+    };

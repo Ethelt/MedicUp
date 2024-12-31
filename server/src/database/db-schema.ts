@@ -1,8 +1,8 @@
 import { ColumnType, Selectable } from "kysely";
 
-import { GeneratedAlways } from "kysely";
 import { Patient } from "@medicup/shared";
-import { Satisfies } from "../utils/types";
+import { Satisfies } from "@medicup/shared";
+import { GeneratedAlways } from "kysely";
 
 export interface DatabaseSchema {
   patient: PatientTable;

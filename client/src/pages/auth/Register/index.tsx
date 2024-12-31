@@ -1,7 +1,9 @@
 import {
   ApiRoutes,
+  PatientRegisterErrorDto,
   PatientRegisterRequestDto,
   PatientRegisterResponseDto,
+  typedKeys,
 } from "@medicup/shared";
 import { LoadingButton } from "@mui/lab";
 import { Stack, TextField, Typography } from "@mui/material";
@@ -63,13 +65,26 @@ export default function Register() {
 
       const response = await Api.post<
         PatientRegisterRequestDto,
-        PatientRegisterResponseDto
+        PatientRegisterResponseDto,
+        PatientRegisterErrorDto
       >(ApiRoutes.auth.registerPatient, data);
 
       if (response.ok) {
-        console.log("succ", response.data);
+        console.log("Success", response.data);
       } else {
-        console.log("err", response.error);
+        if ("message" in response.error) {
+          console.log("Error", response.error.message);
+        } else {
+          const fieldsError = response.error;
+          typedKeys(fieldsError).forEach((field) => {
+            form.setFieldMeta(field, (prev) => ({
+              ...prev,
+              errorMap: {
+                onChange: fieldsError[field],
+              },
+            }));
+          });
+        }
       }
     },
   });

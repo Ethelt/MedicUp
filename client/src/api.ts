@@ -1,5 +1,9 @@
 import axios, { AxiosInstance } from "axios";
 
+type DefaultError = {
+  message: string;
+};
+
 export class Api {
   private static _axios: AxiosInstance;
 
@@ -15,7 +19,7 @@ export class Api {
     return Api._axios;
   }
 
-  public static async get<TParams, TResponse, TError = { message: string }>(
+  public static async get<TParams, TResponse, TError = DefaultError>(
     route: string,
     params: TParams
   ) {
@@ -26,14 +30,17 @@ export class Api {
       if (!axios.isAxiosError(error)) throw error;
 
       if (error.status && error.status >= 400 && error.status < 500) {
-        return { ok: false, error: error.response?.data as TError } as const;
+        return {
+          ok: false,
+          error: error.response?.data as TError | DefaultError,
+        } as const;
       }
 
       throw error;
     }
   }
 
-  public static async post<TBody, TResponse, TError = { message: string }>(
+  public static async post<TBody, TResponse, TError = DefaultError>(
     route: string,
     body: TBody
   ) {
@@ -44,7 +51,10 @@ export class Api {
       if (!axios.isAxiosError(error)) throw error;
 
       if (error.status && error.status >= 400 && error.status < 500) {
-        return { ok: false, error: error.response?.data as TError } as const;
+        return {
+          ok: false,
+          error: error.response?.data as TError | DefaultError,
+        } as const;
       }
 
       throw error;

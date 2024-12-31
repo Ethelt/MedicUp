@@ -11,7 +11,10 @@ export class AuthRouter {
     app.post(ApiRoutes.auth.logout, this.logout);
   }
 
-  private static async loginPatient(req: Request, res: Response): Promise<void> {
+  private static async loginPatient(
+    req: Request,
+    res: Response
+  ): Promise<void> {
     const result = await AuthService.loginPatient();
     res.json({ message: result });
   }
@@ -21,14 +24,20 @@ export class AuthRouter {
     res.json({ message: result });
   }
 
-  private static async loginRegistrar(req: Request, res: Response): Promise<void> {
+  private static async loginRegistrar(
+    req: Request,
+    res: Response
+  ): Promise<void> {
     const result = await AuthService.loginRegistrar();
     res.json({ message: result });
   }
 
-  private static async registerPatient(req: Request, res: Response): Promise<void> {
-    const result = await AuthService.registerPatient();
-    res.json({ message: result });
+  private static async registerPatient(
+    req: Request,
+    res: Response
+  ): Promise<void> {
+    const result = await AuthService.registerPatient(req.body);
+    res.json(result);
   }
 
   private static async logout(req: Request, res: Response): Promise<void> {

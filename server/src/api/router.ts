@@ -1,5 +1,6 @@
 import { ApiRoutes } from "@medicup/shared";
 import { Express, NextFunction, Request, Response } from "express";
+import { ApiError } from "../utils/errors";
 import { AuthRouter } from "./auth/auth.router";
 
 export class Router {
@@ -25,9 +26,13 @@ export class Router {
 
     // default error handler
     app.use((err: any, _: Request, res: Response, __: NextFunction) => {
-      res
-        .status(err.status || 400)
-        .json({ message: err.message ?? "Error occurred" });
+      if (err instanceof ApiError) {
+        res.status(400).json(err.errorData);
+      } else {
+        res
+          .status(err.status || 400)
+          .json({ message: err.message ?? "Error occurred" });
+      }
     });
   }
 }

@@ -6,7 +6,6 @@ export type Patient = {
   lastName: string;
   email: string;
   phone: string;
-  password: string;
   note: string | null;
   createdAt: Date;
   deactivatedAt: Date | null;
