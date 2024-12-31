@@ -6,7 +6,6 @@ import {
 import { LoadingButton } from "@mui/lab";
 import { Stack, TextField, Typography } from "@mui/material";
 import { useForm } from "@tanstack/react-form";
-import { useState } from "react";
 import { Api } from "../../../api";
 import { ErrorText } from "../../../components/ErrorText";
 
@@ -19,13 +18,10 @@ type RegisterForm = {
   lastName: string;
   pesel: string;
   passportNumber: string;
+  identityMethod: "pesel" | "passport";
 };
 
 export default function Register() {
-  const [identityMethod, setIdentityMethod] = useState<"pesel" | "passport">(
-    "pesel"
-  );
-
   const form = useForm<RegisterForm>({
     defaultValues: {
       email: "bartek@test.com",
@@ -36,6 +32,7 @@ export default function Register() {
       pesel: "12345678901",
       passportNumber: "",
       phoneNumber: "123456789",
+      identityMethod: "pesel",
     },
     onSubmit: async (values) => {
       const partialData = {
@@ -47,12 +44,15 @@ export default function Register() {
       };
 
       let data: PatientRegisterRequestDto;
-      if (identityMethod === "pesel" && values.value.pesel) {
+      if (values.value.identityMethod === "pesel" && values.value.pesel) {
         data = {
           ...partialData,
           pesel: values.value.pesel,
         };
-      } else if (identityMethod === "passport" && values.value.passportNumber) {
+      } else if (
+        values.value.identityMethod === "passport" &&
+        values.value.passportNumber
+      ) {
         data = {
           ...partialData,
           passportNumber: values.value.passportNumber,
@@ -75,8 +75,9 @@ export default function Register() {
   });
 
   const toggleIdentityMethod = () => {
-    if (identityMethod === "pesel") {
-      setIdentityMethod("passport");
+    const currentMethod = form.getFieldValue("identityMethod");
+    if (currentMethod === "pesel") {
+      form.setFieldValue("identityMethod", "passport");
       form.setFieldValue("pesel", "");
       form.setFieldMeta("pesel", (prev) => ({
         ...prev,
@@ -86,7 +87,7 @@ export default function Register() {
         },
       }));
     } else {
-      setIdentityMethod("pesel");
+      form.setFieldValue("identityMethod", "pesel");
       form.setFieldValue("passportNumber", "");
       form.setFieldMeta("passportNumber", (prev) => ({
         ...prev,
@@ -159,7 +160,7 @@ export default function Register() {
         name="pesel"
         validators={{
           onChange: (value) => {
-            if (identityMethod !== "pesel") {
+            if (form.getFieldValue("identityMethod") !== "pesel") {
               return;
             }
 
@@ -172,7 +173,7 @@ export default function Register() {
           },
         }}
         children={(field) =>
-          identityMethod === "pesel" ? (
+          form.getFieldValue("identityMethod") === "pesel" ? (
             <>
               <TextField
                 value={field.state.value}
@@ -193,7 +194,7 @@ export default function Register() {
         name="passportNumber"
         validators={{
           onChange: (value) => {
-            if (identityMethod !== "passport") {
+            if (form.getFieldValue("identityMethod") !== "passport") {
               return;
             }
 
@@ -206,7 +207,7 @@ export default function Register() {
           },
         }}
         children={(field) =>
-          identityMethod === "passport" ? (
+          form.getFieldValue("identityMethod") === "passport" ? (
             <>
               <TextField
                 value={field.state.value}
@@ -302,7 +303,7 @@ export default function Register() {
         onClick={toggleIdentityMethod}
         sx={{ textDecoration: "underline", cursor: "pointer" }}
       >
-        {identityMethod === "pesel"
+        {form.getFieldValue("identityMethod") === "pesel"
           ? "Nie posiadam numeru PESEL"
           : "Posiadam numer PESEL"}
       </Typography>
