@@ -5,6 +5,7 @@ This guide will help you set up and run this project. Don't worry if you're new 
 ## 1. Install Required Tools
 
 ### Install Node.js and npm
+
 1. Go to [Node.js website](https://nodejs.org)
 2. Download the "LTS" (Long Term Support) version
 3. Double click the downloaded file and follow the installation steps
@@ -14,9 +15,11 @@ This guide will help you set up and run this project. Don't worry if you're new 
 node --version
 npm --version
 ```
+
 Both commands should show a version number.
 
 ### Install Docker
+
 1. Go to [Docker website](https://www.docker.com/products/docker-desktop)
 2. Download Docker Desktop for your system (Windows/Mac)
 3. Install it by double clicking and following the steps
@@ -26,6 +29,7 @@ Both commands should show a version number.
 ```bash
 docker --version
 ```
+
 You should see a version number.
 
 ## 2. Download and Set Up the Project
@@ -42,9 +46,33 @@ You should see a version number.
 ```bash
 docker-compose up -d
 ```
+
 You should see some text showing Docker starting up.
 
-## 4. Start the Server
+## 4. Start the library compilation
+
+1. Open a new Terminal/Command Prompt window
+2. Navigate to the shared folder:
+
+```bash
+cd shared
+```
+
+3. Install the shared library packages:
+
+```bash
+npm install
+```
+
+4. Start compiling the shared library:
+
+```bash
+npm run dev
+```
+
+You should see a message saying the shared library is being compiled in watch mode.
+
+## 5. Start the Server
 
 1. Open a new Terminal/Command Prompt window
 2. Navigate to the server folder:
@@ -52,19 +80,22 @@ You should see some text showing Docker starting up.
 ```bash
 cd server
 ```
+
 3. Install the server packages:
 
 ```bash
 npm install
 ```
+
 4. Start the server:
 
 ```bash
 npm run dev
 ```
+
 You should see a message saying the server is running.
 
-## 5. Start the Client
+## 6. Start the Client
 
 1. Open another new Terminal/Command Prompt window
 2. Navigate to the client folder:
@@ -72,16 +103,19 @@ You should see a message saying the server is running.
 ```bash
 cd client
 ```
+
 3. Install the client packages:
 
 ```bash
 npm install
 ```
+
 4. Start the client:
 
 ```bash
 npm run dev
 ```
+
 A browser window should open automatically.
 
 ## All Done! 🎉
@@ -93,29 +127,37 @@ A browser window should open automatically.
 ## Common Problems
 
 ### "Port already in use" error
+
 Something else is using that port. Try:
+
 1. Close other programs that might be using the port
 2. Restart your computer
 
 ### Docker not starting
+
 1. Make sure Docker Desktop is running
 2. Try restarting Docker Desktop
 3. Restart your computer
 
 ### "Command not found" error
+
 Make sure you're in the right folder when running commands
 
 ### Need to start over?
+
 1. Stop everything (press Ctrl+C in each Terminal window)
 2. Run this to stop Docker:
 
 ```bash
 docker-compose down
 ```
+
 3. Then start again from step 3
 
 ## Need Help?
+
 If you're stuck, try:
+
 1. Reading the error message carefully
 2. Closing everything and starting over
 3. Restarting your computer
