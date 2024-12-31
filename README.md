@@ -49,7 +49,24 @@ docker-compose up -d
 
 You should see some text showing Docker starting up.
 
-## 4. Start the library compilation
+## 4. Migrate the Database
+
+Migrations are used to create the actual database tables we'll use later in the code.
+
+1. Open a new Terminal/Command Prompt window
+2. Navigate to the server folder:
+
+```bash
+cd server
+```
+
+3. Apply the migrations:
+
+```bash
+npm run migrate:latest
+```
+
+## 5. Start the library compilation
 
 1. Open a new Terminal/Command Prompt window
 2. Navigate to the shared folder:
@@ -72,7 +89,7 @@ npm run dev
 
 You should see a message saying the shared library is being compiled in watch mode.
 
-## 5. Start the Server
+## 6. Start the Server
 
 1. Open a new Terminal/Command Prompt window
 2. Navigate to the server folder:
@@ -95,7 +112,7 @@ npm run dev
 
 You should see a message saying the server is running.
 
-## 6. Start the Client
+## 7. Start the Client
 
 1. Open another new Terminal/Command Prompt window
 2. Navigate to the client folder:
@@ -153,6 +170,28 @@ docker-compose down
 ```
 
 3. Then start again from step 3
+
+## Creating new migrations
+
+1. Navigate to the server folder:
+
+```bash
+cd server
+```
+
+2. Make a new migration:
+
+```bash
+npm run migrate:make <migration-name>
+```
+
+3. Remove the down method from the generated file
+4. Add the changes you want to the up method; refer to other migrations for examples
+5. Run your migration:
+
+```bash
+npm run migrate:latest
+```
 
 ## Need Help?
 
