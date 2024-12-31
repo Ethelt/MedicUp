@@ -4,12 +4,35 @@ import { AuthService } from "./auth.service";
 
 export class AuthRouter {
   static registerRoutes(app: Express): void {
-    app.post(ApiRoutes.auth.login, this.login);
+    app.post(ApiRoutes.auth.loginPatient, this.loginPatient);
+    app.post(ApiRoutes.auth.loginDoctor, this.loginDoctor);
+    app.post(ApiRoutes.auth.loginRegistrar, this.loginRegistrar);
+    app.post(ApiRoutes.auth.registerPatient, this.registerPatient);
+    app.post(ApiRoutes.auth.logout, this.logout);
   }
 
-  // @TODO: add actual login logic
-  private static async login(req: Request, res: Response): Promise<void> {
-    const result = await AuthService.login();
+  private static async loginPatient(req: Request, res: Response): Promise<void> {
+    const result = await AuthService.loginPatient();
+    res.json({ message: result });
+  }
+
+  private static async loginDoctor(req: Request, res: Response): Promise<void> {
+    const result = await AuthService.loginDoctor();
+    res.json({ message: result });
+  }
+
+  private static async loginRegistrar(req: Request, res: Response): Promise<void> {
+    const result = await AuthService.loginRegistrar();
+    res.json({ message: result });
+  }
+
+  private static async registerPatient(req: Request, res: Response): Promise<void> {
+    const result = await AuthService.registerPatient();
+    res.json({ message: result });
+  }
+
+  private static async logout(req: Request, res: Response): Promise<void> {
+    const result = await AuthService.logout();
     res.json({ message: result });
   }
 }

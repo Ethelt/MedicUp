@@ -1,6 +1,8 @@
-import { ColumnType } from "kysely";
+import { ColumnType, Selectable } from "kysely";
 
 import { GeneratedAlways } from "kysely";
+import { Patient } from "@medicup/shared";
+import { Satisfies } from "../utils/types";
 
 export interface DatabaseSchema {
   patient: PatientTable;
@@ -9,7 +11,7 @@ export interface DatabaseSchema {
   visit: VisitTable;
 }
 
-interface PatientTable {
+type PatientTable = {
   id: GeneratedAlways<number>;
   pesel: string | null;
   passportNumber: string | null;
@@ -21,7 +23,9 @@ interface PatientTable {
   note: string | null;
   createdAt: GeneratedAlways<Date>;
   deactivatedAt: ColumnType<Date | null, Date | null, never>;
-}
+};
+
+type _PatientTypeCheck = Satisfies<Selectable<PatientTable>, Patient>;
 
 interface RegistrarTable {
   id: GeneratedAlways<number>;
