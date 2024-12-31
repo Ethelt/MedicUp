@@ -4,9 +4,10 @@ import { GeneratedAlways } from "kysely";
 
 export interface DatabaseSchema {
   patient: PatientTable;
+  registrar: RegistrarTable;
 }
 
-export type PatientTable = {
+interface PatientTable {
   id: GeneratedAlways<number>;
   pesel: string | null;
   passportNumber: string | null;
@@ -17,4 +18,12 @@ export type PatientTable = {
   password: string;
   createdAt: GeneratedAlways<Date>;
   deactivatedAt: ColumnType<Date | null, Date | null, never>;
-};
+}
+
+interface RegistrarTable {
+  id: GeneratedAlways<number>;
+  login: string;
+  password: string;
+  createdAt: GeneratedAlways<Date>;
+  deactivatedAt: ColumnType<Date | null, Date | null, never>;
+}
