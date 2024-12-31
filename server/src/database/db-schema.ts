@@ -18,6 +18,7 @@ interface PatientTable {
   email: string;
   phone: string;
   password: string;
+  note: string | null;
   createdAt: GeneratedAlways<Date>;
   deactivatedAt: ColumnType<Date | null, Date | null, never>;
 }
@@ -44,6 +45,9 @@ interface VisitTable {
   id: GeneratedAlways<number>;
   patientId: number;
   doctorId: number;
+  patientNote: string | null;
+  doctorPublicNote: string | null;
+  doctorPrivateNote: string | null;
   startAt: Date;
   endAt: Date;
   cancelledAt: ColumnType<Date | null, Date | null, never>;
