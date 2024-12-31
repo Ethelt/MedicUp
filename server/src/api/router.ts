@@ -14,15 +14,11 @@ export class Router {
     const pool = Database.getInstance();
 
     app.get(ApiRoutes.health, async (req: Request, res: Response) => {
-      try {
-        const result = await pool.query("SELECT NOW()");
-        res.json({
-          message: "Server is running",
-          dbTime: result.rows[0].now,
-        });
-      } catch (error: any) {
-        res.status(500).json({ error: error.message });
-      }
+      const result = await pool.query("SELECT NOW()");
+      res.json({
+        message: "Server is running",
+        dbTime: result.rows[0].now,
+      });
     });
   }
 
