@@ -6,7 +6,7 @@ export const AppRoutes = {
       doctor: "/login/doctor",
       registrar: "/login/registrar",
     },
-    register: "/register",
+    register: "/patient/register",
   },
   patient: {
     home: "/patient/home",
