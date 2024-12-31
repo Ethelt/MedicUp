@@ -1,6 +1,7 @@
 import { Express, Request, Response } from "express";
 import { Database } from "../database/database";
 import { AuthRouter } from "./auth/auth.router";
+import { ApiRoutes } from "@medicup/shared";
 
 export class Router {
   static registerRoutes(app: Express) {
@@ -11,7 +12,7 @@ export class Router {
   private static registerDefaultRoutes(app: Express) {
     const pool = Database.getInstance();
 
-    app.get("/health", async (req: Request, res: Response) => {
+    app.get(ApiRoutes.health, async (req: Request, res: Response) => {
       try {
         const result = await pool.query("SELECT NOW()");
         res.json({

@@ -2,8 +2,8 @@ import { BrowserRouter, Route, Routes } from "react-router";
 import App from "./pages/App";
 import Login from "./pages/auth/Login";
 import AuthLayout from "./pages/auth/AuthLayout";
-import { AppRoutes } from "./constants/AppRoutes";
 import Register from "./pages/auth/Register";
+import { AppRoutes } from "./constants/AppRoutes";
 
 export function Router() {
   return (
