@@ -11,21 +11,20 @@ const port = process.env.PORT || 5000;
 
 // Middleware
 app.use(express.json());
-app.use(cors());
+app.use(cors({ origin: process.env.CLIENT_URL, credentials: true }));
 app.use(
   session({
-    secret: "secret",
+    secret: process.env.SESSION_SECRET || 'secret',
     resave: false,
-    saveUninitialized: true,
-    cookie: { secure: true },
+    saveUninitialized: false,
+    cookie: { 
+      secure: process.env.NODE_ENV === 'production',
+      httpOnly: true,
+      sameSite: 'lax',
+      maxAge: 24 * 60 * 60 * 1000
+    }
   })
 );
-declare module "express-session" {
-  interface Session {
-    userId: number;
-    userType: "patient" | "doctor" | "registrar";
-  }
-}
 
 // Routes
 Controller.registerRoutes(app);

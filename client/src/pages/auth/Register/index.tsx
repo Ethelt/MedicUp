@@ -78,7 +78,7 @@ export default function Register() {
         navigate(AppRoutes.patient.home);
       } else {
         if ("message" in response.error) {
-          console.log("Error", response.error.message);
+          console.error("Error", response.error.message);
         } else {
           const fieldsError = response.error;
           typedKeys(fieldsError).forEach((field) => {

@@ -1,5 +1,3 @@
-import { Patient } from "@medicup/shared";
-
 import {
   PatientLoginRequestDto,
   PatientLoginResponseDto,
@@ -8,16 +6,15 @@ import {
   PatientRegisterResponseDto,
 } from "@medicup/shared";
 import bcrypt from "bcrypt";
-import { Session } from "express-session";
-import { Selectable } from "kysely";
+import { Session, SessionData } from "express-session";
 import { Database } from "../../database/database";
-import { DatabaseSchema } from "../../database/db-schema";
 import { ApiError } from "../../utils/errors";
+import { removePatientSensitiveData } from "../../utils/sensitive-data";
 
 export class AuthService {
   static async loginPatient(
     loginRequestDto: PatientLoginRequestDto,
-    session: Session
+    session: Session & Partial<SessionData>
   ): Promise<PatientLoginResponseDto> {
     const db = Database.getInstance();
 
@@ -58,9 +55,10 @@ export class AuthService {
 
     session.userId = patient.id;
     session.userType = "patient";
+    session.save();
 
     return {
-      patient: this.removePatientSensitiveData(patient),
+      patient: removePatientSensitiveData(patient),
     };
   }
 
@@ -74,7 +72,7 @@ export class AuthService {
 
   static async registerPatient(
     data: PatientRegisterRequestDto,
-    session: Session
+    session: Session & Partial<SessionData>
   ): Promise<PatientRegisterResponseDto> {
     const db = Database.getInstance();
 
@@ -163,12 +161,5 @@ export class AuthService {
 
   static async logout(): Promise<string> {
     return "Logout successful";
-  }
-
-  private static removePatientSensitiveData(
-    patient: Selectable<DatabaseSchema["patient"]>
-  ): Patient {
-    const { password: _, ...patientWithoutPassword } = patient;
-    return patientWithoutPassword;
   }
 }

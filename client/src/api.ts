@@ -14,6 +14,7 @@ export class Api {
     if (!Api._axios) {
       Api._axios = axios.create({
         baseURL: backendUrl,
+        withCredentials: true,
       });
     }
     return Api._axios;

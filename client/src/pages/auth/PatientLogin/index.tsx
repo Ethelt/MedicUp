@@ -33,7 +33,7 @@ export default function PatientLogin() {
       if (response.ok) {
         navigate(AppRoutes.patient.home);
       } else {
-        console.log("Error", response.error);
+        console.error("Error", response.error);
         // @TODO: error handling
       }
     },

@@ -7,4 +7,7 @@ export const ApiRoutes = {
     registerPatient: "/auth/register/patient",
     logout: "/auth/logout",
   },
+  patients: {
+    me: "/patients/me",
+  },
 } as const;
