@@ -10,6 +10,7 @@ export class PatientService {
       .selectFrom("patient")
       .selectAll()
       .where("id", "=", session.userId)
+      .where("deactivatedAt", "is", null)
       .executeTakeFirstOrThrow();
 
     return removePatientSensitiveData(patient);

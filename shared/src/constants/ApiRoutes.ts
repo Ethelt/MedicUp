@@ -10,4 +10,10 @@ export const ApiRoutes = {
   patients: {
     me: "/patients/me",
   },
+  registrars: {
+    me: "/registrars/me",
+  },
+  doctors: {
+    me: "/doctors/me",
+  },
 } as const;

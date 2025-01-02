@@ -2,13 +2,17 @@ import { ApiRoutes } from "@medicup/shared";
 import { Express, NextFunction, Request, Response } from "express";
 import { ApiError } from "../utils/errors";
 import { AuthController } from "./auth/auth.controller";
+import { DoctorController } from "./doctor/doctor.controller";
 import { PatientController } from "./patient/patient.controller";
+import { RegistrarController } from "./registrar/registrar.controller";
 
 export class Controller {
   static registerRoutes(app: Express) {
     this.registerDefaultRoutes(app);
     AuthController.registerRoutes(app);
     PatientController.registerRoutes(app);
+    DoctorController.registerRoutes(app);
+    RegistrarController.registerRoutes(app);
     this.registerErrorHandlers(app);
   }
 
