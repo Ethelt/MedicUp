@@ -1,8 +1,9 @@
 import { Stack, Typography } from "@mui/material";
-import { usePatient } from "../PatientLayout";
+import { useContext } from "react";
+import { PatientContext } from "../../../context/PatientContext";
 
 export default function PatientHome() {
-  const patient = usePatient();
+  const patient = useContext(PatientContext);
 
   return (
     <Stack>

@@ -20,16 +20,16 @@ export class AuthController {
   }
 
   private static async loginDoctor(req: Request, res: Response): Promise<void> {
-    const result = await AuthService.loginDoctor();
-    res.json({ message: result });
+    const result = await AuthService.loginDoctor(req.body, req.session);
+    res.json(result);
   }
 
   private static async loginRegistrar(
     req: Request,
     res: Response
   ): Promise<void> {
-    const result = await AuthService.loginRegistrar();
-    res.json({ message: result });
+    const result = await AuthService.loginRegistrar(req.body, req.session);
+    res.json(result);
   }
 
   private static async registerPatient(
@@ -41,7 +41,7 @@ export class AuthController {
   }
 
   private static async logout(req: Request, res: Response): Promise<void> {
-    const result = await AuthService.logout();
-    res.json({ message: result });
+    const result = await AuthService.logout(req.session);
+    res.json(result);
   }
 }

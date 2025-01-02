@@ -1,13 +1,10 @@
 import { ApiRoutes, Patient } from "@medicup/shared";
 import { Stack, Typography } from "@mui/material";
-import { createContext, useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Outlet, useNavigate } from "react-router";
 import { Api } from "../../api";
 import { AppRoutes } from "../../constants/AppRoutes";
-
-const PatientContext = createContext<Patient | null>(null);
-
-export const usePatient = () => useContext(PatientContext);
+import { PatientContext } from "../../context/PatientContext";
 
 export default function PatientLayout() {
   const [patient, setPatient] = useState<Patient | null>(null);
@@ -27,7 +24,7 @@ export default function PatientLayout() {
       }
     };
     fetchPatient();
-  }, []);
+  }, [navigate]);
 
   return (
     <PatientContext.Provider value={patient}>

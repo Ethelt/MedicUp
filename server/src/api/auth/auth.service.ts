@@ -1,15 +1,23 @@
 import {
+  DoctorLoginRequestDto,
+  DoctorLoginResponseDto,
   PatientLoginRequestDto,
   PatientLoginResponseDto,
   PatientRegisterErrorDto,
   PatientRegisterRequestDto,
   PatientRegisterResponseDto,
+  RegistrarLoginRequestDto,
+  RegistrarLoginResponseDto,
 } from "@medicup/shared";
 import bcrypt from "bcrypt";
 import { Session, SessionData } from "express-session";
 import { Database } from "../../database/database";
 import { ApiError } from "../../utils/errors";
-import { removePatientSensitiveData } from "../../utils/sensitive-data";
+import {
+  removeDoctorSensitiveData,
+  removePatientSensitiveData,
+  removeRegistrarSensitiveData,
+} from "../../utils/sensitive-data";
 
 export class AuthService {
   static async loginPatient(
@@ -18,7 +26,6 @@ export class AuthService {
   ): Promise<PatientLoginResponseDto> {
     const db = Database.getInstance();
 
-    // Find patient with matching email
     const patient = await db
       .selectFrom("patient")
       .selectAll()
@@ -37,7 +44,6 @@ export class AuthService {
       });
     }
 
-    // Verify password
     const passwordMatch = await bcrypt.compare(
       loginRequestDto.password,
       patient.password
@@ -48,7 +54,6 @@ export class AuthService {
       });
     }
 
-    // Set session data
     if (!session) {
       throw new Error("No session available");
     }
@@ -62,12 +67,98 @@ export class AuthService {
     };
   }
 
-  static async loginDoctor(): Promise<string> {
-    return "Doctor login successful";
+  static async loginDoctor(
+    loginRequestDto: DoctorLoginRequestDto,
+    session: Session & Partial<SessionData>
+  ): Promise<DoctorLoginResponseDto> {
+    const db = Database.getInstance();
+
+    const doctor = await db
+      .selectFrom("doctor")
+      .selectAll()
+      .where("login", "=", loginRequestDto.login)
+      .executeTakeFirst();
+
+    if (!doctor) {
+      throw new ApiError({
+        message: "Invalid login or password",
+      });
+    }
+
+    if (doctor.deactivatedAt) {
+      throw new ApiError({
+        message: "Account deactivated",
+      });
+    }
+
+    const passwordMatch = await bcrypt.compare(
+      loginRequestDto.password,
+      doctor.password
+    );
+    if (!passwordMatch) {
+      throw new ApiError({
+        message: "Invalid login or password",
+      });
+    }
+
+    if (!session) {
+      throw new Error("No session available");
+    }
+
+    session.userId = doctor.id;
+    session.userType = "doctor";
+    session.save();
+
+    return {
+      doctor: removeDoctorSensitiveData(doctor),
+    };
   }
 
-  static async loginRegistrar(): Promise<string> {
-    return "Registrar login successful";
+  static async loginRegistrar(
+    loginRequestDto: RegistrarLoginRequestDto,
+    session: Session & Partial<SessionData>
+  ): Promise<RegistrarLoginResponseDto> {
+    const db = Database.getInstance();
+
+    const registrar = await db
+      .selectFrom("registrar")
+      .selectAll()
+      .where("login", "=", loginRequestDto.login)
+      .executeTakeFirst();
+
+    if (!registrar) {
+      throw new ApiError({
+        message: "Invalid login or password",
+      });
+    }
+
+    if (registrar.deactivatedAt) {
+      throw new ApiError({
+        message: "Account deactivated",
+      });
+    }
+
+    const passwordMatch = await bcrypt.compare(
+      loginRequestDto.password,
+      registrar.password
+    );
+    if (!passwordMatch) {
+      throw new ApiError({
+        message: "Invalid login or password",
+      });
+    }
+
+    if (!session) {
+      throw new Error("No session available");
+    }
+
+    session.userId = registrar.id;
+    session.userType = "registrar";
+    session.save();
+
+    return {
+      registrar: removeRegistrarSensitiveData(registrar),
+    };
   }
 
   static async registerPatient(
@@ -76,7 +167,6 @@ export class AuthService {
   ): Promise<PatientRegisterResponseDto> {
     const db = Database.getInstance();
 
-    // Check if patient with same email already exists
     const existingEmail = await db
       .selectFrom("patient")
       .select("id")
@@ -89,7 +179,6 @@ export class AuthService {
       });
     }
 
-    // Check if patient with same phone number already exists
     const existingPhone = await db
       .selectFrom("patient")
       .select("id")
@@ -102,7 +191,6 @@ export class AuthService {
       });
     }
 
-    // Check if patient with same PESEL/passport exists
     if ("pesel" in data) {
       const existingPesel = await db
         .selectFrom("patient")
@@ -129,10 +217,8 @@ export class AuthService {
       }
     }
 
-    // Hash the password
     const hashedPassword = await bcrypt.hash(data.password, 10);
 
-    // Create the patient
     const patient = await db
       .insertInto("patient")
       .values({
@@ -152,14 +238,21 @@ export class AuthService {
       throw new Error("Failed to create patient");
     }
 
-    // Login patient
     return this.loginPatient(
       { email: data.email, password: data.password },
       session
     );
   }
 
-  static async logout(): Promise<string> {
-    return "Logout successful";
+  static async logout(session: Session & Partial<SessionData>): Promise<void> {
+    return new Promise((resolve, reject) => {
+      session.destroy((err) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve();
+        }
+      });
+    });
   }
 }
