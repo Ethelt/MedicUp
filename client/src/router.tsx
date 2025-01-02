@@ -6,8 +6,12 @@ import DoctorLogin from "./pages/auth/DoctorLogin";
 import PatientLogin from "./pages/auth/PatientLogin";
 import Register from "./pages/auth/Register";
 import RegistrarLogin from "./pages/auth/RegistrarLogin";
+import DoctorLayout from "./pages/doctor/DoctorLayout";
+import DoctorHome from "./pages/doctor/home";
 import PatientHome from "./pages/patient/home";
 import PatientLayout from "./pages/patient/PatientLayout";
+import RegistrarHome from "./pages/registrar/home";
+import RegistrarLayout from "./pages/registrar/RegistrarLayout";
 
 export function Router() {
   return (
@@ -28,6 +32,12 @@ export function Router() {
         </Route>
         <Route element={<PatientLayout />}>
           <Route path={AppRoutes.patient.home} element={<PatientHome />} />
+        </Route>
+        <Route element={<DoctorLayout />}>
+          <Route path={AppRoutes.doctor.home} element={<DoctorHome />} />
+        </Route>
+        <Route element={<RegistrarLayout />}>
+          <Route path={AppRoutes.registrar.home} element={<RegistrarHome />} />
         </Route>
       </Routes>
     </BrowserRouter>
