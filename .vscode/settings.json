@@ -3,5 +3,11 @@
   "editor.codeActionsOnSave": {
     "source.organizeImports": "always",
     "source.removeUnusedImports": "always"
+  },
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/bower_components": true,
+    "**/*.code-search": true,
+    "**/dist": true
   }
 }
