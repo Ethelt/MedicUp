@@ -1,6 +1,7 @@
 import { CalendarApi } from "@fullcalendar/core/index.js";
 import {
   AddVisitRequestDto,
+  AddVisitResponseDto,
   ApiRoutes,
   GetVisitsRequestDto,
   GetVisitsResponseDto,
@@ -16,23 +17,8 @@ import VisitsCalendar from "../../../components/visits/VisitsCalendar";
 import { PatientContext } from "../../../context/PatientContext";
 
 export default function PatientHome() {
-  const patient = useContext(PatientContext);
+  const { patient } = useContext(PatientContext);
   const [visits, setVisits] = useState<Visit[]>([]);
-
-  const handleVisitAdd = useCallback(async (dto: AddVisitRequestDto) => {
-    console.log(dto);
-  }, []);
-
-  const [visitAddPopupConfig, setVisitAddPopupConfig] =
-    useState<VisitAddDialogProps>({
-      open: false,
-      onClose: () =>
-        setVisitAddPopupConfig((config) => ({ ...config, open: false })),
-      patientId: -1,
-      startAt: new Date(),
-      endAt: new Date(),
-      onSave: handleVisitAdd,
-    });
 
   const refreshVisits = useCallback(async () => {
     if (!patient) return;
@@ -55,9 +41,36 @@ export default function PatientHome() {
     refreshVisits();
   }, [refreshVisits]);
 
+  const handleVisitAdd = useCallback(
+    async (dto: AddVisitRequestDto) => {
+      const result = await Api.post<AddVisitRequestDto, AddVisitResponseDto>(
+        ApiRoutes.visit.root,
+        dto
+      );
+
+      if (result.ok) {
+        refreshVisits();
+      } else {
+        // @TODO: handle errors
+      }
+    },
+    [refreshVisits]
+  );
+
+  const [visitAddPopupConfig, setVisitAddPopupConfig] = useState<
+    Omit<VisitAddDialogProps, "onSave">
+  >({
+    open: false,
+    onClose: () =>
+      setVisitAddPopupConfig((config) => ({ ...config, open: false })),
+    patientId: -1,
+    startAt: new Date(),
+    endAt: new Date(),
+  });
+
   const handleEventAdd = useCallback(
     (start: Date, end: Date, calendarApi: CalendarApi) => {
-      console.log(start, end, calendarApi);
+      console.warn(start, end, calendarApi);
 
       if (!patient) return;
 
@@ -72,18 +85,10 @@ export default function PatientHome() {
     [patient]
   );
 
+  // @TODO: implement visit moving
   const handleEventChange = useCallback(
     (start: Date, end: Date, calendarApi: CalendarApi) => {
       console.log(start, end, calendarApi);
-
-      // const title = prompt("Enter event title:");
-      // if (title) {
-      //   calendarApi.addEvent({
-      //     title,
-      //     start: start,
-      //     end: end,
-      //   });
-      // }
     },
     []
   );
@@ -98,7 +103,7 @@ export default function PatientHome() {
           visits={visits}
         />
 
-        <VisitAddDialog {...visitAddPopupConfig} />
+        <VisitAddDialog {...visitAddPopupConfig} onSave={handleVisitAdd} />
       </Box>
     </Stack>
   );

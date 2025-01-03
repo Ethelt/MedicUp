@@ -27,7 +27,7 @@ export default function PatientLayout() {
   }, [navigate]);
 
   return (
-    <PatientContext.Provider value={patient}>
+    <PatientContext.Provider value={{patient}}>
       <Stack height="100%">
         <Typography variant="h1">Patient</Typography>
         <Outlet />

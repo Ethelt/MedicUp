@@ -18,4 +18,7 @@ export const ApiRoutes = {
     me: "/doctor/me",
     available: "/doctor/available",
   },
+  visit: {
+    root: "/visit",
+  },
 } as const;

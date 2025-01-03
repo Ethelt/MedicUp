@@ -5,6 +5,7 @@ import { AuthController } from "./auth/auth.controller";
 import { DoctorController } from "./doctor/doctor.controller";
 import { PatientController } from "./patient/patient.controller";
 import { RegistrarController } from "./registrar/registrar.controller";
+import { VisitController } from "./visit/visit.controller";
 
 export class Controller {
   static registerRoutes(app: Express) {
@@ -13,6 +14,7 @@ export class Controller {
     PatientController.registerRoutes(app);
     DoctorController.registerRoutes(app);
     RegistrarController.registerRoutes(app);
+    VisitController.registerRoutes(app);
     this.registerErrorHandlers(app);
   }
 
