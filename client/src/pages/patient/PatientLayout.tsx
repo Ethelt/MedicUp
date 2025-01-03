@@ -28,7 +28,7 @@ export default function PatientLayout() {
 
   return (
     <PatientContext.Provider value={patient}>
-      <Stack>
+      <Stack height="100%">
         <Typography variant="h1">Patient</Typography>
         <Outlet />
       </Stack>
