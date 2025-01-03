@@ -5,7 +5,7 @@ import { RegistrarService } from "./registrar.service";
 
 export class RegistrarController {
   static registerRoutes(app: Express) {
-    app.get(ApiRoutes.registrars.me, this.getMe);
+    app.get(ApiRoutes.registrar.me, this.getMe);
   }
 
   private static async getMe(req: Request, res: Response) {

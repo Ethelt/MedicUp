@@ -5,7 +5,7 @@ import { PatientService } from "./patient.service";
 
 export class PatientController {
   static registerRoutes(app: Express) {
-    app.get(ApiRoutes.patients.me, this.getMe);
+    app.get(ApiRoutes.patient.me, this.getMe);
   }
 
   private static async getMe(req: Request, res: Response) {

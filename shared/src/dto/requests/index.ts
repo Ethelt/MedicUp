@@ -1,2 +1,3 @@
 export * from "./auth";
-export * from "./visits";
+export * from "./doctor";
+export * from "./visit";

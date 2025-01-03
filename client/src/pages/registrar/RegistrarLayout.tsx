@@ -13,7 +13,7 @@ export default function RegistrarLayout() {
   useEffect(() => {
     const fetchPatient = async () => {
       const response = await Api.get<undefined, Registrar>(
-        ApiRoutes.registrars.me,
+        ApiRoutes.registrar.me,
         undefined
       );
       if (response.ok) {

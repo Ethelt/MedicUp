@@ -74,7 +74,6 @@ export default function Register() {
       >(ApiRoutes.auth.registerPatient, data);
 
       if (response.ok) {
-        console.log("Success", response.data);
         navigate(AppRoutes.patient.home);
       } else {
         if ("message" in response.error) {

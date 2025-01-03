@@ -12,10 +12,10 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn("doctorId", "integer", (col) =>
       col.notNull().references("doctor.id")
     )
-    .addColumn("startAt", "timestamp", (col) => col.notNull())
-    .addColumn("endAt", "timestamp", (col) => col.notNull())
-    .addColumn("cancelledAt", "timestamp")
-    .addColumn("createdAt", "timestamp", (col) =>
+    .addColumn("startAt", "timestamptz", (col) => col.notNull())
+    .addColumn("endAt", "timestamptz", (col) => col.notNull())
+    .addColumn("cancelledAt", "timestamptz")
+    .addColumn("createdAt", "timestamptz", (col) =>
       col.defaultTo("now()").notNull()
     )
     .execute();

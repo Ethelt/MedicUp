@@ -13,7 +13,7 @@ export default function DoctorLayout() {
   useEffect(() => {
     const fetchPatient = async () => {
       const response = await Api.get<undefined, Doctor>(
-        ApiRoutes.doctors.me,
+        ApiRoutes.doctor.me,
         undefined
       );
       if (response.ok) {
