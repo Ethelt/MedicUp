@@ -1,14 +1,38 @@
-import { CalendarApi } from "@fullcalendar/core/index.js";
+import { CalendarApi, OverlapFunc } from "@fullcalendar/core/index.js";
 import interactionPlugin from "@fullcalendar/interaction";
 import FullCalendar from "@fullcalendar/react";
 import timeGridPlugin from "@fullcalendar/timegrid";
+import { Visit } from "@medicup/shared";
+import { useMemo } from "react";
 
 type VisitsCalendarProps = {
   handleEventAdd: (start: Date, end: Date, calendarApi: CalendarApi) => void;
   handleEventChange: (start: Date, end: Date, calendarApi: CalendarApi) => void;
+  visits: Visit[];
 };
 
+const cancelledVisitColor = "grey";
+
 export default function VisitsCalendar(props: VisitsCalendarProps) {
+  const disallowNonCancelledOverlap: OverlapFunc = (stillEvent) => {
+    // stupid but works
+    if (stillEvent.backgroundColor === cancelledVisitColor) return true;
+    return false;
+  };
+
+  const events = useMemo(
+    () =>
+      props.visits.map((visit) => ({
+        id: visit.id.toString(),
+        start: visit.startAt,
+        end: visit.endAt,
+        title: `Wizyta ${visit.patient.firstName} ${visit.patient.lastName} - dr ${visit.doctor.firstName} ${visit.doctor.lastName}`,
+        backgroundColor: visit.cancelledAt ? cancelledVisitColor : undefined,
+        editable: visit.cancelledAt ? false : true,
+      })),
+    [props.visits]
+  );
+
   return (
     <FullCalendar
       height={"100%"}
@@ -43,8 +67,9 @@ export default function VisitsCalendar(props: VisitsCalendarProps) {
         )
       }
       eventResizableFromStart={true}
-      eventOverlap={false}
-      selectOverlap={false}
+      eventOverlap={disallowNonCancelledOverlap}
+      selectOverlap={disallowNonCancelledOverlap}
+      events={events}
     />
   );
 }

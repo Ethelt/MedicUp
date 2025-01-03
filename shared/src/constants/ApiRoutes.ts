@@ -9,6 +9,7 @@ export const ApiRoutes = {
   },
   patient: {
     me: "/patient/me",
+    visits: "/patient/visits",
   },
   registrar: {
     me: "/registrar/me",

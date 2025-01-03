@@ -1,7 +1,14 @@
 import { CalendarApi } from "@fullcalendar/core/index.js";
-import { AddVisitRequestDto } from "@medicup/shared";
+import {
+  AddVisitRequestDto,
+  ApiRoutes,
+  GetVisitsRequestDto,
+  GetVisitsResponseDto,
+  Visit,
+} from "@medicup/shared";
 import { Box, Stack, Typography } from "@mui/material";
-import { useCallback, useContext, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
+import { Api } from "../../../api";
 import VisitAddDialog, {
   VisitAddDialogProps,
 } from "../../../components/visits/VisitAddDialog";
@@ -10,6 +17,7 @@ import { PatientContext } from "../../../context/PatientContext";
 
 export default function PatientHome() {
   const patient = useContext(PatientContext);
+  const [visits, setVisits] = useState<Visit[]>([]);
 
   const handleVisitAdd = useCallback(async (dto: AddVisitRequestDto) => {
     console.log(dto);
@@ -26,45 +34,59 @@ export default function PatientHome() {
       onSave: handleVisitAdd,
     });
 
-  const handleEventAdd = (start: Date, end: Date, calendarApi: CalendarApi) => {
-    console.log(start, end, calendarApi);
-
+  const refreshVisits = useCallback(async () => {
     if (!patient) return;
 
-    setVisitAddPopupConfig((config) => ({
-      ...config,
-      open: true,
-      startAt: start,
-      endAt: end,
-      patientId: patient.id,
-    }));
+    const result = await Api.get<GetVisitsRequestDto, GetVisitsResponseDto>(
+      ApiRoutes.patient.visits,
+      {
+        patientId: patient.id,
+      }
+    );
 
-    // const title = prompt("Enter event title:");
-    // if (title) {
-    //   calendarApi.addEvent({
-    //     title,
-    //     start: start,
-    //     end: end,
-    //   });
-    // }
-  };
+    if (result.ok) {
+      setVisits(result.data.visits);
+    } else {
+      // @TODO: handle errors
+    }
+  }, [patient]);
 
-  const handleEventChange = (
-    start: Date,
-    end: Date,
-    calendarApi: CalendarApi
-  ) => {
-    console.log(start, end, calendarApi);
+  useEffect(() => {
+    refreshVisits();
+  }, [refreshVisits]);
 
-    // const title = prompt("Enter event title:");
-    // if (title) {
-    //   calendarApi.addEvent({
-    //     title,
-    //     start: start,
-    //     end: end,
-    //   });
-    // }
-  };
+  const handleEventAdd = useCallback(
+    (start: Date, end: Date, calendarApi: CalendarApi) => {
+      console.log(start, end, calendarApi);
+
+      if (!patient) return;
+
+      setVisitAddPopupConfig((config) => ({
+        ...config,
+        open: true,
+        startAt: start,
+        endAt: end,
+        patientId: patient.id,
+      }));
+    },
+    [patient]
+  );
+
+  const handleEventChange = useCallback(
+    (start: Date, end: Date, calendarApi: CalendarApi) => {
+      console.log(start, end, calendarApi);
+
+      // const title = prompt("Enter event title:");
+      // if (title) {
+      //   calendarApi.addEvent({
+      //     title,
+      //     start: start,
+      //     end: end,
+      //   });
+      // }
+    },
+    []
+  );
 
   return (
     <Stack height="100%">
@@ -73,6 +95,7 @@ export default function PatientHome() {
         <VisitsCalendar
           handleEventAdd={handleEventAdd}
           handleEventChange={handleEventChange}
+          visits={visits}
         />
 
         <VisitAddDialog {...visitAddPopupConfig} />

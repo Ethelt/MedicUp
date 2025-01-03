@@ -7,4 +7,6 @@ insert into registrar (login, password) values ('rejestrator', '$2b$10$EquuajpRz
 insert into registrar (login, password) values ('registrar', '$2b$10$wD2WznS1XxBYEVfGfYcwOOFQDOVaelJ4ze27bjSiOXo2pres8ahJW');
 
 insert into visit ("patientId", "doctorId", "startAt", "endAt") values (1, 1, '2025-01-01T12:00:00Z', '2025-01-01T15:00:00Z');
+insert into visit ("patientId", "doctorId", "startAt", "endAt", "cancelledAt") 
+values (1, 2, '2025-01-01T13:00:00Z', '2025-01-01T15:00:00Z', '2025-01-01T10:00:00Z');
 insert into visit ("patientId", "doctorId", "startAt", "endAt") values (1, 2, '2025-01-01T13:00:00Z', '2025-01-01T15:00:00Z');

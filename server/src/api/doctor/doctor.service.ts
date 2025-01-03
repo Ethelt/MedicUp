@@ -29,6 +29,7 @@ export class DoctorService {
             eb.and([
               eb("visit.startAt", "<", end),
               eb("visit.endAt", ">", start),
+              eb("visit.cancelledAt", "is", null),
             ])
           )
       )
