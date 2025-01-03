@@ -1,14 +1,17 @@
 import { CalendarApi } from "@fullcalendar/core/index.js";
 import { AddVisitRequestDto } from "@medicup/shared";
 import { Box, Stack, Typography } from "@mui/material";
-import { useCallback, useState } from "react";
+import { useCallback, useContext, useState } from "react";
 import VisitAddDialog, {
   VisitAddDialogProps,
 } from "../../../components/visits/VisitAddDialog";
 import VisitsCalendar from "../../../components/visits/VisitsCalendar";
+import { PatientContext } from "../../../context/PatientContext";
 
 export default function PatientHome() {
-  const handleVisitAdd = useCallback((dto: AddVisitRequestDto) => {
+  const patient = useContext(PatientContext);
+
+  const handleVisitAdd = useCallback(async (dto: AddVisitRequestDto) => {
     console.log(dto);
   }, []);
 
@@ -17,7 +20,7 @@ export default function PatientHome() {
       open: false,
       onClose: () =>
         setVisitAddPopupConfig((config) => ({ ...config, open: false })),
-      patientId: 1,
+      patientId: -1,
       startAt: new Date(),
       endAt: new Date(),
       onSave: handleVisitAdd,
@@ -26,12 +29,14 @@ export default function PatientHome() {
   const handleEventAdd = (start: Date, end: Date, calendarApi: CalendarApi) => {
     console.log(start, end, calendarApi);
 
+    if (!patient) return;
+
     setVisitAddPopupConfig((config) => ({
       ...config,
       open: true,
       startAt: start,
       endAt: end,
-      patientId: 10,
+      patientId: patient.id,
     }));
 
     // const title = prompt("Enter event title:");

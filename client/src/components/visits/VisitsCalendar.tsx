@@ -24,6 +24,14 @@ export default function VisitsCalendar(props: VisitsCalendarProps) {
         minute: "2-digit",
         hour12: false,
       }}
+      dayHeaderFormat={{
+        weekday: "short",
+        day: "numeric",
+        month: "short",
+        omitCommas: true,
+      }}
+      selectConstraint={{ startTime: "06:00:00", endTime: "20:00:00" }}
+      locale="pl"
       editable={true}
       selectable={true}
       select={(e) => props.handleEventAdd(e.start, e.end, e.view.calendar)}
