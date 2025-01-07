@@ -10,9 +10,11 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
+  DialogContentText,
   MenuItem,
   Select,
   Stack,
+  TextField,
   Typography,
 } from "@mui/material";
 import { useEffect, useState } from "react";
@@ -28,13 +30,11 @@ export type VisitAddDialogProps = {
   onSave: (dto: AddVisitRequestDto) => Promise<void>;
 };
 
-// @Task: dodanie pola z uwagami pacjenta
-// na razie tylko wygląd, więc wystarczy zmienić tylko ten plik
-
 export default function VisitAddDialog(props: VisitAddDialogProps) {
   const [availableDoctors, setAvailableDoctors] = useState<Doctor[]>([]);
   const [selectedDoctor, setSelectedDoctor] = useState<Doctor | null>(null);
   const [patientNote, setPatientNote] = useState<string | null>(null);
+  const [showConfirmation, setShowConfirmation] = useState(false);
 
   // to zignoruj
   useEffect(() => {
@@ -57,6 +57,13 @@ export default function VisitAddDialog(props: VisitAddDialogProps) {
   // to zignoruj
   const handleSave = async () => {
     if (selectedDoctor) {
+      setShowConfirmation(true);
+    }
+  };
+
+  // to zignoruj
+  const handleConfirmedSave = async () => {
+    if (selectedDoctor) {
       await props.onSave({
         patientId: props.patientId,
         doctorId: selectedDoctor.id,
@@ -64,64 +71,125 @@ export default function VisitAddDialog(props: VisitAddDialogProps) {
         endAt: props.endAt,
         patientNote,
       });
+      setShowConfirmation(false);
       props.onClose();
     }
   };
 
   return (
-    <Dialog open={props.open} onClose={props.onClose}>
-      <DialogContent>
-        {/* 
-        gdzieś w tym Stack trzeba to dodać
-        niech przy zmianie uzywa setPatientNote
-        przeczytaj dokumentację React jak działa useState
-        mozna zrobić tak, ze jeśli jest null to nie pokazuje się input, tylko guzik "dodaj notatkę"
-        a ten guzik robi setPatientNote("") i wtedy kiedy typeof patientNote === "string" to pokazuje się input
-        ale jak masz prostszy sposób to zrób po swojemu, byle by na końcu wywoływąło to setPatientNote
-        */}
-        <Stack spacing={2}>
-          <Typography variant="h6">Nowa wizyta</Typography>
-          <Typography>
-            <b>Termin:</b> {formatVisitDateRange(props.startAt, props.endAt)}
-          </Typography>
-          <Stack direction="row" spacing={2} alignItems="center">
-            <Typography mr={2}>
-              <b>Lekarz:</b>
+    <>
+      {/* 
+        @Task: popraw wygląd tworzenia wizyty
+        wystarczy zmienić tylko ten Dialog, ten ponizej robi coś innego
+      */}
+      <Dialog open={props.open && !showConfirmation} onClose={props.onClose}>
+        <DialogContent>
+          <Stack spacing={2}>
+            <Typography variant="h6">Nowa wizyta</Typography>
+            <Typography>
+              <b>Termin:</b> {formatVisitDateRange(props.startAt, props.endAt)}
             </Typography>
-            <Select
-              value={selectedDoctor?.id ?? ""}
-              onChange={(e) =>
-                setSelectedDoctor(
-                  availableDoctors.find(
-                    (d) => d.id === parseInt(e.target.value.toString())
-                  ) ?? null
-                )
-              }
-              fullWidth
-            >
-              {availableDoctors.map((d) => (
-                <MenuItem key={d.id} value={d.id}>
-                  {d.firstName} {d.lastName}
-                </MenuItem>
-              ))}
-            </Select>
-          </Stack>
-        </Stack>
-      </DialogContent>
+            <Stack direction="row" spacing={2} alignItems="center">
+              <Typography mr={2}>
+                <b>Lekarz:</b>
+              </Typography>
+              <Select
+                value={selectedDoctor?.id ?? ""}
+                onChange={(e) =>
+                  setSelectedDoctor(
+                    availableDoctors.find(
+                      (d) => d.id === parseInt(e.target.value.toString())
+                    ) ?? null
+                  )
+                }
+                fullWidth
+              >
+                {availableDoctors.map((d) => (
+                  <MenuItem key={d.id} value={d.id}>
+                    {d.firstName} {d.lastName}
+                  </MenuItem>
+                ))}
+              </Select>
+            </Stack>
 
-      <DialogActions>
-        <Button variant="outlined" color="primary" onClick={props.onClose}>
-          Anuluj
-        </Button>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={handleSave}
-          disabled={!selectedDoctor}
-        >
-          Zapisz
-        </Button>
-      </DialogActions>
-    </Dialog>
+            {patientNote === null ? (
+              <Button variant="text" onClick={() => setPatientNote("")}>
+                Dodaj notatkę
+              </Button>
+            ) : (
+              <TextField
+                label="Notatka"
+                multiline
+                rows={3}
+                value={patientNote}
+                onChange={(e) => setPatientNote(e.target.value)}
+                fullWidth
+              />
+            )}
+          </Stack>
+        </DialogContent>
+
+        <DialogActions>
+          <Button variant="outlined" color="primary" onClick={props.onClose}>
+            Anuluj
+          </Button>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleSave}
+            disabled={!selectedDoctor}
+          >
+            Zapisz
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* 
+        @Task: popraw wygląd akceptacji wizyty
+        wystarczy zmienić tylko ten DialogContent, ten powyzej robi coś innego
+      */}
+      <Dialog
+        open={showConfirmation}
+        onClose={() => setShowConfirmation(false)}
+      >
+        <DialogContent>
+          <Stack spacing={2}>
+            <Typography variant="h6">Potwierdź wizytę</Typography>
+            <DialogContentText>
+              Czy podane informacje są prawidłowe?
+            </DialogContentText>
+            <Typography>
+              <b>Termin:</b> {formatVisitDateRange(props.startAt, props.endAt)}
+            </Typography>
+            <Typography>
+              <b>Lekarz:</b> {selectedDoctor?.firstName}{" "}
+              {selectedDoctor?.lastName}
+            </Typography>
+            {patientNote && (
+              <Typography>
+                <b>Notatka:</b> {patientNote}
+              </Typography>
+            )}
+          </Stack>
+        </DialogContent>
+
+        <DialogActions>
+          <Button
+            variant="outlined"
+            color="primary"
+            onClick={() => setShowConfirmation(false)}
+          >
+            Wróć
+          </Button>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleConfirmedSave}
+          >
+            Potwierdź
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </>
   );
 }
