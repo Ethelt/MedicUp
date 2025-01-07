@@ -28,11 +28,15 @@ export type VisitAddDialogProps = {
   onSave: (dto: AddVisitRequestDto) => Promise<void>;
 };
 
-// @TODO: add patient notes and improve the look
+// @Task: dodanie pola z uwagami pacjenta
+// na razie tylko wygląd, więc wystarczy zmienić tylko ten plik
+
 export default function VisitAddDialog(props: VisitAddDialogProps) {
   const [availableDoctors, setAvailableDoctors] = useState<Doctor[]>([]);
   const [selectedDoctor, setSelectedDoctor] = useState<Doctor | null>(null);
+  const [patientNote, setPatientNote] = useState<string | null>(null);
 
+  // to zignoruj
   useEffect(() => {
     (async () => {
       const result = await Api.get<
@@ -50,6 +54,7 @@ export default function VisitAddDialog(props: VisitAddDialogProps) {
     })();
   }, [props.startAt, props.endAt]);
 
+  // to zignoruj
   const handleSave = async () => {
     if (selectedDoctor) {
       await props.onSave({
@@ -57,7 +62,7 @@ export default function VisitAddDialog(props: VisitAddDialogProps) {
         doctorId: selectedDoctor.id,
         startAt: props.startAt,
         endAt: props.endAt,
-        patientNote: null,
+        patientNote,
       });
       props.onClose();
     }
@@ -66,6 +71,14 @@ export default function VisitAddDialog(props: VisitAddDialogProps) {
   return (
     <Dialog open={props.open} onClose={props.onClose}>
       <DialogContent>
+        {/* 
+        gdzieś w tym Stack trzeba to dodać
+        niech przy zmianie uzywa setPatientNote
+        przeczytaj dokumentację React jak działa useState
+        mozna zrobić tak, ze jeśli jest null to nie pokazuje się input, tylko guzik "dodaj notatkę"
+        a ten guzik robi setPatientNote("") i wtedy kiedy typeof patientNote === "string" to pokazuje się input
+        ale jak masz prostszy sposób to zrób po swojemu, byle by na końcu wywoływąło to setPatientNote
+        */}
         <Stack spacing={2}>
           <Typography variant="h6">Nowa wizyta</Typography>
           <Typography>
@@ -95,6 +108,7 @@ export default function VisitAddDialog(props: VisitAddDialogProps) {
           </Stack>
         </Stack>
       </DialogContent>
+
       <DialogActions>
         <Button variant="outlined" color="primary" onClick={props.onClose}>
           Anuluj
