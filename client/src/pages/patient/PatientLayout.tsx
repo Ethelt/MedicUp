@@ -1,15 +1,19 @@
 import { ApiRoutes, Patient } from "@medicup/shared";
 import { Stack, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
-import { Outlet, useNavigate } from "react-router";
+import { Link, Outlet, useNavigate } from "react-router";
 import { Api } from "../../api";
 import { AppRoutes } from "../../constants/AppRoutes";
 import { PatientContext } from "../../context/PatientContext";
+
+// @Task: zrobienie ładnego headera z nawigacją do różnych stron pacjenta
+// wystarczy edytować tylko jedno miejsce w tym pliku, jest komentarz gdzie
 
 export default function PatientLayout() {
   const [patient, setPatient] = useState<Patient | null>(null);
   const navigate = useNavigate();
 
+  // tym się nie przejmuj
   useEffect(() => {
     const fetchPatient = async () => {
       const response = await Api.get<undefined, Patient>(
@@ -27,9 +31,26 @@ export default function PatientLayout() {
   }, [navigate]);
 
   return (
-    <PatientContext.Provider value={{patient}}>
+    // tym Context tez się nie przejmuj
+    <PatientContext.Provider value={{ patient }}>
       <Stack height="100%">
-        <Typography variant="h1">Patient</Typography>
+        {/* wystarczy zedytować tylko ten Stack*/}
+        <Stack
+          direction="row"
+          justifyContent="space-between"
+          alignItems="center"
+          padding={2}
+        >
+          <Typography variant="h6">Daj tu logo</Typography>
+          <Stack direction="row" gap={2}>
+            <Typography variant="h6">
+              <Link to={AppRoutes.patient.home}>Home</Link>
+            </Typography>
+            <Typography variant="h6">
+              <Link to={AppRoutes.patient.profile}>Profile</Link>
+            </Typography>
+          </Stack>
+        </Stack>
         <Outlet />
       </Stack>
     </PatientContext.Provider>

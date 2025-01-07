@@ -10,6 +10,7 @@ export const AppRoutes = {
   },
   patient: {
     home: "/patient/home",
+    profile: "/patient/profile",
   },
   doctor: {
     home: "/doctor/home",
