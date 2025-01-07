@@ -10,6 +10,7 @@ import DoctorLayout from "./pages/doctor/DoctorLayout";
 import DoctorHome from "./pages/doctor/home";
 import PatientHome from "./pages/patient/home";
 import PatientLayout from "./pages/patient/PatientLayout";
+import PatientProfile from "./pages/patient/profile";
 import RegistrarHome from "./pages/registrar/home";
 import RegistrarLayout from "./pages/registrar/RegistrarLayout";
 
@@ -32,6 +33,10 @@ export function Router() {
         </Route>
         <Route element={<PatientLayout />}>
           <Route path={AppRoutes.patient.home} element={<PatientHome />} />
+          <Route
+            path={AppRoutes.patient.profile}
+            element={<PatientProfile />}
+          />
         </Route>
         <Route element={<DoctorLayout />}>
           <Route path={AppRoutes.doctor.home} element={<DoctorHome />} />
