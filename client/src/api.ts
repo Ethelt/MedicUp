@@ -61,4 +61,25 @@ export class Api {
       throw error;
     }
   }
+
+  public static async delete<TBody, TResponse, TError = DefaultError>(
+    route: string,
+    body: TBody
+  ) {
+    try {
+      const result = await this.axios.delete(route, { data: body });
+      return { ok: true, data: result.data as TResponse } as const;
+    } catch (error) {
+      if (!axios.isAxiosError(error)) throw error;
+
+      if (error.status && error.status >= 400 && error.status < 500) {
+        return {
+          ok: false,
+          error: error.response?.data as TError | DefaultError,
+        } as const;
+      }
+
+      throw error;
+    }
+  }
 }

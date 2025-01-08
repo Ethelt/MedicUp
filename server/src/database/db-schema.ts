@@ -1,7 +1,6 @@
 import { ColumnType, Selectable } from "kysely";
 
-import { Patient } from "@medicup/shared";
-import { Satisfies } from "@medicup/shared";
+import { Patient, Satisfies, Visit } from "@medicup/shared";
 import { GeneratedAlways } from "kysely";
 
 export interface DatabaseSchema {
@@ -54,6 +53,15 @@ interface VisitTable {
   doctorPrivateNote: string | null;
   startAt: Date;
   endAt: Date;
-  cancelledAt: ColumnType<Date | null, Date | null, never>;
+  cancelledAt: ColumnType<Date | null, never, Date | null>;
   createdAt: GeneratedAlways<Date>;
 }
+
+type _VisitTypeCheck = Satisfies<
+  Selectable<VisitTable>,
+  Omit<Visit, "patient" | "doctor" | "startAt" | "endAt" | "cancelledAt"> & {
+    startAt: Date;
+    endAt: Date;
+    cancelledAt: Date | null;
+  }
+>;

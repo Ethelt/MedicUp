@@ -3,6 +3,8 @@ import {
   AddVisitRequestDto,
   AddVisitResponseDto,
   ApiRoutes,
+  CancelVisitRequestDto,
+  CancelVisitResponseDto,
   GetVisitsRequestDto,
   GetVisitsResponseDto,
   Visit,
@@ -71,9 +73,21 @@ export default function PatientHome() {
     endAt: new Date(),
   });
 
-  const handleVisitCancel = useCallback(async (visit: Visit) => {
-    console.log(visit);
-  }, []);
+  const handleVisitCancel = useCallback(
+    async (visit: Visit) => {
+      const result = await Api.delete<
+        CancelVisitRequestDto,
+        CancelVisitResponseDto
+      >(ApiRoutes.visit.root, {
+        visitId: visit.id,
+      });
+
+      if (result.ok) {
+        refreshVisits();
+      }
+    },
+    [refreshVisits]
+  );
 
   const [visitInfoPopupConfig, setVisitInfoPopupConfig] = useState<
     Omit<VisitInfoDialogProps, "onCancel">

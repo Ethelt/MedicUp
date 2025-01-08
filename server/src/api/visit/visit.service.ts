@@ -23,6 +23,9 @@ export class VisitService {
     const visits = visitsWithData.map((visit) => {
       return {
         ...visit,
+        startAt: visit.startAt.toISOString(),
+        endAt: visit.endAt.toISOString(),
+        cancelledAt: visit.cancelledAt?.toISOString() ?? null,
         doctor: {
           id: visit.doctorId,
           firstName: visit.doctorFirstName,
@@ -66,6 +69,47 @@ export class VisitService {
 
     return {
       ...newVisit,
+      startAt: newVisit.startAt.toISOString(),
+      endAt: newVisit.endAt.toISOString(),
+      cancelledAt: newVisit.cancelledAt?.toISOString() ?? null,
+      patient: {
+        id: patient.id,
+        firstName: patient.firstName,
+        lastName: patient.lastName,
+      },
+      doctor: {
+        id: doctor.id,
+        firstName: doctor.firstName,
+        lastName: doctor.lastName,
+      },
+    };
+  }
+
+  static async cancelVisit(visitId: number): Promise<Visit> {
+    const db = Database.getInstance();
+    const visit = await db
+      .updateTable("visit")
+      .set({ cancelledAt: new Date() })
+      .where("id", "=", visitId)
+      .returningAll()
+      .executeTakeFirstOrThrow();
+
+    const patient = await db
+      .selectFrom("patient")
+      .where("id", "=", visit.patientId)
+      .selectAll()
+      .executeTakeFirstOrThrow();
+    const doctor = await db
+      .selectFrom("doctor")
+      .where("id", "=", visit.doctorId)
+      .selectAll()
+      .executeTakeFirstOrThrow();
+
+    return {
+      ...visit,
+      startAt: visit.startAt.toISOString(),
+      endAt: visit.endAt.toISOString(),
+      cancelledAt: visit.cancelledAt?.toISOString() ?? null,
       patient: {
         id: patient.id,
         firstName: patient.firstName,

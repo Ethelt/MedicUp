@@ -2,6 +2,8 @@ import {
   AddVisitRequestDto,
   AddVisitResponseDto,
   ApiRoutes,
+  CancelVisitRequestDto,
+  CancelVisitResponseDto,
 } from "@medicup/shared";
 import { Express, Request, Response } from "express";
 import { getSessionData } from "../../utils/session-data";
@@ -10,6 +12,7 @@ import { VisitService } from "./visit.service";
 export class VisitController {
   static registerRoutes(app: Express) {
     app.post(ApiRoutes.visit.root, this.addVisit);
+    app.delete(ApiRoutes.visit.root, this.cancelVisit);
   }
 
   private static async addVisit(
@@ -28,6 +31,16 @@ export class VisitController {
     }
 
     const visit = await VisitService.addVisit(req.body);
+    res.json({ visit });
+  }
+
+  private static async cancelVisit(
+    req: Request<{}, {}, CancelVisitRequestDto>,
+    res: Response<CancelVisitResponseDto>
+  ) {
+    const requestedVisitId = parseInt(req.body.visitId.toString());
+
+    const visit = await VisitService.cancelVisit(requestedVisitId);
     res.json({ visit });
   }
 }
