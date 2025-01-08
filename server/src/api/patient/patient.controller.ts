@@ -1,7 +1,7 @@
 import {
   ApiRoutes,
-  GetVisitsRequestDto,
-  GetVisitsResponseDto,
+  GetVisitsForPatientRequestDto,
+  GetVisitsForPatientResponseDto,
 } from "@medicup/shared";
 import { Express, Request, Response } from "express";
 import { getSessionData } from "../../utils/session-data";
@@ -22,8 +22,8 @@ export class PatientController {
   }
 
   private static async getVisitsForPatient(
-    req: Request<{}, {}, {}, GetVisitsRequestDto>,
-    res: Response<GetVisitsResponseDto>
+    req: Request<{}, {}, {}, GetVisitsForPatientRequestDto>,
+    res: Response<GetVisitsForPatientResponseDto>
   ) {
     const sessionData = getSessionData(req.session);
     const requestedPatientId = parseInt(req.query.patientId.toString());

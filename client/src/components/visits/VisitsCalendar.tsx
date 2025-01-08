@@ -2,8 +2,14 @@ import { CalendarApi, OverlapFunc } from "@fullcalendar/core/index.js";
 import interactionPlugin from "@fullcalendar/interaction";
 import FullCalendar from "@fullcalendar/react";
 import timeGridPlugin from "@fullcalendar/timegrid";
-import { Visit } from "@medicup/shared";
-import { useMemo } from "react";
+import {
+  ApiRoutes,
+  GetVisitsForDoctorRequestDto,
+  GetVisitsForDoctorResponseDto,
+  Visit,
+} from "@medicup/shared";
+import { useCallback, useMemo, useState } from "react";
+import { Api } from "../../api";
 
 type VisitsCalendarProps = {
   handleEventAdd: (start: Date, end: Date, calendarApi: CalendarApi) => void;
@@ -12,15 +18,7 @@ type VisitsCalendarProps = {
   visits: Visit[];
 };
 
-const cancelledVisitColor = "grey";
-
 export default function VisitsCalendar(props: VisitsCalendarProps) {
-  const disallowNonCancelledOverlap: OverlapFunc = (stillEvent) => {
-    // stupid but works
-    if (stillEvent.backgroundColor === cancelledVisitColor) return true;
-    return false;
-  };
-
   const events = useMemo(
     () =>
       props.visits.map((visit) => ({
@@ -33,6 +31,41 @@ export default function VisitsCalendar(props: VisitsCalendarProps) {
       })),
     [props.visits]
   );
+
+  // used when moving the visits
+  const [doctorVisits, setDoctorVisits] = useState<Visit[]>([]);
+
+  const loadDoctorVisits = useCallback(async (doctorId: number) => {
+    const response = await Api.get<
+      GetVisitsForDoctorRequestDto,
+      GetVisitsForDoctorResponseDto
+    >(ApiRoutes.doctor.visits, {
+      doctorId,
+    });
+    if (response.ok) {
+      setDoctorVisits(response.data.visits);
+    }
+  }, []);
+
+  const backgroundEvents = useMemo(() => {
+    return doctorVisits
+      .filter((visit) => !visit.cancelledAt)
+      .filter((visit) => !props.visits.find((v) => v.id === visit.id))
+      .map((visit) => ({
+        id: `background-${visit.id.toString()}`,
+        start: visit.startAt,
+        end: visit.endAt,
+        display: "background",
+        title: "",
+        backgroundColor: "red",
+        editable: false,
+        selectable: false,
+      }));
+  }, [doctorVisits, props.visits]);
+
+  const allEvents = useMemo(() => {
+    return [...backgroundEvents, ...events];
+  }, [backgroundEvents, events]);
 
   return (
     <FullCalendar
@@ -76,10 +109,38 @@ export default function VisitsCalendar(props: VisitsCalendarProps) {
           props.handleEventClick(visit);
         }
       }}
+      eventDragStart={(e) => {
+        const visit = props.visits.find(
+          (visit) => visit.id.toString() === e.event.id
+        );
+        if (visit) {
+          loadDoctorVisits(visit.doctor.id);
+        }
+      }}
+      eventDragStop={() => {
+        setDoctorVisits([]);
+      }}
       eventResizableFromStart={true}
       eventOverlap={disallowNonCancelledOverlap}
       selectOverlap={disallowNonCancelledOverlap}
-      events={events}
+      events={allEvents}
+      // eventSources={[
+      //   // {
+      //   //   events: backgroundEvents,
+      //   //   display: "background",
+      //   // },
+      //   // {
+      //   //   events: events,
+      //   // },
+      // ]}
     />
   );
 }
+
+const cancelledVisitColor = "grey";
+
+const disallowNonCancelledOverlap: OverlapFunc = (stillEvent) => {
+  // stupid but works
+  if (stillEvent.backgroundColor === cancelledVisitColor) return true;
+  return false;
+};

@@ -5,8 +5,8 @@ import {
   ApiRoutes,
   CancelVisitRequestDto,
   CancelVisitResponseDto,
-  GetVisitsRequestDto,
-  GetVisitsResponseDto,
+  GetVisitsForPatientRequestDto,
+  GetVisitsForPatientResponseDto,
   MoveVisitRequestDto,
   MoveVisitResponseDto,
   Visit,
@@ -33,12 +33,12 @@ export default function PatientHome() {
   const refreshVisits = useCallback(async () => {
     if (!patient) return;
 
-    const result = await Api.get<GetVisitsRequestDto, GetVisitsResponseDto>(
-      ApiRoutes.patient.visits,
-      {
-        patientId: patient.id,
-      }
-    );
+    const result = await Api.get<
+      GetVisitsForPatientRequestDto,
+      GetVisitsForPatientResponseDto
+    >(ApiRoutes.patient.visits, {
+      patientId: patient.id,
+    });
 
     if (result.ok) {
       setVisits(result.data.visits);
