@@ -14,6 +14,7 @@ import {
 import { Box, Stack, Typography } from "@mui/material";
 import { useCallback, useContext, useEffect, useState } from "react";
 import { Api } from "../../../api";
+import EditableVisitsCalendar from "../../../components/visits/EditableVisitsCalendar";
 import VisitAddDialog, {
   VisitAddDialogProps,
 } from "../../../components/visits/VisitAddDialog";
@@ -23,7 +24,6 @@ import VisitInfoDialog, {
 import VisitMoveDialog, {
   VisitMoveDialogProps,
 } from "../../../components/visits/VisitMoveDialog";
-import VisitsCalendar from "../../../components/visits/VisitsCalendar";
 import { PatientContext } from "../../../context/PatientContext";
 
 export default function PatientHome() {
@@ -181,7 +181,7 @@ export default function PatientHome() {
     <Stack height="100%">
       <Typography variant="h2">PatientHome</Typography>
       <Box sx={{ width: "100%" }} flex={1} minHeight={0}>
-        <VisitsCalendar
+        <EditableVisitsCalendar
           handleEventAdd={handleEventAdd}
           handleEventClick={handleEventClick}
           handleEventChange={handleEventChange}

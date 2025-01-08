@@ -27,8 +27,8 @@ export default function DoctorLayout() {
   }, [navigate]);
 
   return (
-    <DoctorContext.Provider value={doctor}>
-      <Stack>
+    <DoctorContext.Provider value={{ doctor }}>
+      <Stack height="100%">
         <Typography variant="h1">Doctor</Typography>
         <Outlet />
       </Stack>

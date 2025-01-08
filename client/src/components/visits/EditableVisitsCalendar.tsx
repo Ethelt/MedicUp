@@ -11,14 +11,16 @@ import {
 import { useCallback, useMemo, useState } from "react";
 import { Api } from "../../api";
 
-type VisitsCalendarProps = {
+type EditableVisitsCalendarProps = {
   handleEventAdd: (start: Date, end: Date, calendarApi: CalendarApi) => void;
   handleEventClick: (visit: Visit) => void;
   handleEventChange: (visit: Visit, newStartAt: Date, newEndAt: Date) => void;
   visits: Visit[];
 };
 
-export default function VisitsCalendar(props: VisitsCalendarProps) {
+export default function EditableVisitsCalendar(
+  props: EditableVisitsCalendarProps
+) {
   const events = useMemo(
     () =>
       props.visits.map((visit) => ({
