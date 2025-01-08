@@ -107,7 +107,7 @@ export default function EditableVisitsCalendar(
         const visit = props.visits.find(
           (visit) => visit.id.toString() === e.event.id
         );
-        if (visit) {
+        if (visit && !visit.cancelledAt) {
           props.handleEventClick(visit);
         }
       }}

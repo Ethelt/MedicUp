@@ -45,13 +45,13 @@ export default function StaticVisitsCalendar(props: StaticVisitsCalendarProps) {
       }}
       selectConstraint={{ startTime: "06:00:00", endTime: "20:00:00" }}
       locale="pl"
-      editable={true}
-      selectable={true}
+      editable={false}
+      selectable={false}
       eventClick={(e) => {
         const visit = props.visits.find(
           (visit) => visit.id.toString() === e.event.id
         );
-        if (visit) {
+        if (visit && !visit.cancelledAt) {
           props.handleEventClick(visit);
         }
       }}
