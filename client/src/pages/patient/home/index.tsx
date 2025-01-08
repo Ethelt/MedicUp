@@ -7,6 +7,8 @@ import {
   CancelVisitResponseDto,
   GetVisitsRequestDto,
   GetVisitsResponseDto,
+  MoveVisitRequestDto,
+  MoveVisitResponseDto,
   Visit,
 } from "@medicup/shared";
 import { Box, Stack, Typography } from "@mui/material";
@@ -115,12 +117,24 @@ export default function PatientHome() {
     [patient]
   );
 
-  // @TODO: implement visit moving
   const handleEventChange = useCallback(
-    (start: Date, end: Date, calendarApi: CalendarApi) => {
-      console.log(start, end, calendarApi);
+    async (visitId: number, start: Date, end: Date) => {
+      const result = await Api.patch<MoveVisitRequestDto, MoveVisitResponseDto>(
+        ApiRoutes.visit.root,
+        {
+          visitId: visitId,
+          startAt: start,
+          endAt: end,
+        }
+      );
+
+      if (result.ok) {
+        refreshVisits();
+      } else {
+        // @TODO: handle errors
+      }
     },
-    []
+    [refreshVisits]
   );
 
   const handleEventClick = useCallback((visit: Visit) => {

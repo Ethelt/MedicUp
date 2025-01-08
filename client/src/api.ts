@@ -87,6 +87,27 @@ export class Api {
       throw error;
     }
   }
+
+  public static async patch<TBody, TResponse, TError = DefaultError>(
+    route: string,
+    body: TBody
+  ) {
+    try {
+      const result = await this.axios.patch(route, body);
+      return { ok: true, data: result.data as TResponse } as const;
+    } catch (error) {
+      if (!axios.isAxiosError(error)) throw error;
+
+      if (error.status && error.status >= 400 && error.status < 500) {
+        return {
+          ok: false,
+          error: error.response?.data as TError | DefaultError,
+        } as const;
+      }
+
+      throw error;
+    }
+  }
 }
 
 const isoDateFormat = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d*)?$/;

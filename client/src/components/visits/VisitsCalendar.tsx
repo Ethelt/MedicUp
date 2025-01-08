@@ -7,7 +7,7 @@ import { useMemo } from "react";
 
 type VisitsCalendarProps = {
   handleEventAdd: (start: Date, end: Date, calendarApi: CalendarApi) => void;
-  handleEventChange: (start: Date, end: Date, calendarApi: CalendarApi) => void;
+  handleEventChange: (visitId: number, start: Date, end: Date) => void;
   handleEventClick: (visit: Visit) => void;
   visits: Visit[];
 };
@@ -62,9 +62,9 @@ export default function VisitsCalendar(props: VisitsCalendarProps) {
       select={(e) => props.handleEventAdd(e.start, e.end, e.view.calendar)}
       eventChange={(e) =>
         props.handleEventChange(
+          parseInt(e.event.id!),
           e.event.start!,
-          e.event.end!,
-          e.event._context.calendarApi
+          e.event.end!
         )
       }
       eventClick={(e) => {

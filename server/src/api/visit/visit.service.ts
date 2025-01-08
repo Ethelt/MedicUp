@@ -1,4 +1,8 @@
-import { AddVisitRequestDto, Visit } from "@medicup/shared";
+import {
+  AddVisitRequestDto,
+  MoveVisitRequestDto,
+  Visit,
+} from "@medicup/shared";
 import { Database } from "../../database/database";
 
 export class VisitService {
@@ -93,6 +97,43 @@ export class VisitService {
       .where("id", "=", visit.patientId)
       .selectAll()
       .executeTakeFirstOrThrow();
+    const doctor = await db
+      .selectFrom("doctor")
+      .where("id", "=", visit.doctorId)
+      .selectAll()
+      .executeTakeFirstOrThrow();
+
+    return {
+      ...visit,
+      patient: {
+        id: patient.id,
+        firstName: patient.firstName,
+        lastName: patient.lastName,
+      },
+      doctor: {
+        id: doctor.id,
+        firstName: doctor.firstName,
+        lastName: doctor.lastName,
+      },
+    };
+  }
+
+  static async moveVisit(dto: MoveVisitRequestDto): Promise<Visit> {
+    const db = Database.getInstance();
+
+    const visit = await db
+      .updateTable("visit")
+      .set({ startAt: new Date(dto.startAt), endAt: new Date(dto.endAt) })
+      .where("id", "=", dto.visitId)
+      .returningAll()
+      .executeTakeFirstOrThrow();
+
+    const patient = await db
+      .selectFrom("patient")
+      .where("id", "=", visit.patientId)
+      .selectAll()
+      .executeTakeFirstOrThrow();
+
     const doctor = await db
       .selectFrom("doctor")
       .where("id", "=", visit.doctorId)
