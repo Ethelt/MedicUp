@@ -13,7 +13,7 @@ export type Visit = {
   patientNote: string | null;
   doctorPublicNote: string | null;
   doctorPrivateNote: string | null;
-  startAt: string; // Date;
-  endAt: string; // Date;
-  cancelledAt: string | null; // Date;
+  startAt: Date;
+  endAt: Date;
+  cancelledAt: Date | null;
 };

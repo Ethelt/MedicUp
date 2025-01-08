@@ -59,9 +59,5 @@ interface VisitTable {
 
 type _VisitTypeCheck = Satisfies<
   Selectable<VisitTable>,
-  Omit<Visit, "patient" | "doctor" | "startAt" | "endAt" | "cancelledAt"> & {
-    startAt: Date;
-    endAt: Date;
-    cancelledAt: Date | null;
-  }
+  Omit<Visit, "patient" | "doctor">
 >;

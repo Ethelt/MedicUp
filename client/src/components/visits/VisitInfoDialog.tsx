@@ -42,10 +42,7 @@ export default function VisitInfoDialog(props: VisitInfoDialogProps) {
             <Typography variant="h6">Wizyta</Typography>
             <Typography>
               <b>Termin:</b>{" "}
-              {formatVisitDateRange(
-                new Date(props.visit.startAt),
-                new Date(props.visit.endAt)
-              )}
+              {formatVisitDateRange(props.visit.startAt, props.visit.endAt)}
             </Typography>
             <Stack direction="row" spacing={2} alignItems="center">
               <Typography mr={2}>
@@ -90,10 +87,7 @@ export default function VisitInfoDialog(props: VisitInfoDialogProps) {
             <Typography>Czy na pewno chcesz odwołać tę wizytę?</Typography>
             <Typography>
               <b>Termin:</b>{" "}
-              {formatVisitDateRange(
-                new Date(props.visit.startAt),
-                new Date(props.visit.endAt)
-              )}
+              {formatVisitDateRange(props.visit.startAt, props.visit.endAt)}
             </Typography>
             <Typography>
               <b>Lekarz:</b> {props.visit.doctor.firstName}{" "}
