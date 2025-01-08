@@ -124,15 +124,6 @@ export default function VisitsCalendar(props: VisitsCalendarProps) {
       eventOverlap={disallowNonCancelledOverlap}
       selectOverlap={disallowNonCancelledOverlap}
       events={allEvents}
-      // eventSources={[
-      //   // {
-      //   //   events: backgroundEvents,
-      //   //   display: "background",
-      //   // },
-      //   // {
-      //   //   events: events,
-      //   // },
-      // ]}
     />
   );
 }
