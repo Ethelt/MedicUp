@@ -13,6 +13,9 @@ import { Api } from "../../../api";
 import VisitAddDialog, {
   VisitAddDialogProps,
 } from "../../../components/visits/VisitAddDialog";
+import VisitInfoDialog, {
+  VisitInfoDialogProps,
+} from "../../../components/visits/VisitInfoDialog";
 import VisitsCalendar from "../../../components/visits/VisitsCalendar";
 import { PatientContext } from "../../../context/PatientContext";
 
@@ -68,6 +71,19 @@ export default function PatientHome() {
     endAt: new Date(),
   });
 
+  const handleVisitCancel = useCallback(async (visit: Visit) => {
+    console.log(visit);
+  }, []);
+
+  const [visitInfoPopupConfig, setVisitInfoPopupConfig] = useState<
+    Omit<VisitInfoDialogProps, "onCancel">
+  >({
+    open: false,
+    onClose: () =>
+      setVisitInfoPopupConfig((config) => ({ ...config, open: false })),
+    visit: null,
+  });
+
   const handleEventAdd = useCallback(
     (start: Date, end: Date, calendarApi: CalendarApi) => {
       console.warn(start, end, calendarApi);
@@ -93,6 +109,14 @@ export default function PatientHome() {
     []
   );
 
+  const handleEventClick = useCallback((visit: Visit) => {
+    setVisitInfoPopupConfig((config) => ({
+      ...config,
+      open: true,
+      visit,
+    }));
+  }, []);
+
   return (
     <Stack height="100%">
       <Typography variant="h2">PatientHome</Typography>
@@ -100,10 +124,15 @@ export default function PatientHome() {
         <VisitsCalendar
           handleEventAdd={handleEventAdd}
           handleEventChange={handleEventChange}
+          handleEventClick={handleEventClick}
           visits={visits}
         />
 
         <VisitAddDialog {...visitAddPopupConfig} onSave={handleVisitAdd} />
+        <VisitInfoDialog
+          {...visitInfoPopupConfig}
+          onCancel={handleVisitCancel}
+        />
       </Box>
     </Stack>
   );

@@ -113,7 +113,7 @@ export default function VisitAddDialog(props: VisitAddDialogProps) {
             </Stack>
 
             {patientNote === null ? (
-              <Button variant="text" onClick={() => setPatientNote("")}>
+              <Button variant="outlined" onClick={() => setPatientNote("")}>
                 Dodaj notatkę
               </Button>
             ) : (

@@ -8,6 +8,7 @@ import { useMemo } from "react";
 type VisitsCalendarProps = {
   handleEventAdd: (start: Date, end: Date, calendarApi: CalendarApi) => void;
   handleEventChange: (start: Date, end: Date, calendarApi: CalendarApi) => void;
+  handleEventClick: (visit: Visit) => void;
   visits: Visit[];
 };
 
@@ -66,6 +67,14 @@ export default function VisitsCalendar(props: VisitsCalendarProps) {
           e.event._context.calendarApi
         )
       }
+      eventClick={(e) => {
+        const visit = props.visits.find(
+          (visit) => visit.id.toString() === e.event.id
+        );
+        if (visit) {
+          props.handleEventClick(visit);
+        }
+      }}
       eventResizableFromStart={true}
       eventOverlap={disallowNonCancelledOverlap}
       selectOverlap={disallowNonCancelledOverlap}
