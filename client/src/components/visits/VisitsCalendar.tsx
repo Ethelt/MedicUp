@@ -7,8 +7,8 @@ import { useMemo } from "react";
 
 type VisitsCalendarProps = {
   handleEventAdd: (start: Date, end: Date, calendarApi: CalendarApi) => void;
-  handleEventChange: (visitId: number, start: Date, end: Date) => void;
   handleEventClick: (visit: Visit) => void;
+  handleEventChange: (visit: Visit, newStartAt: Date, newEndAt: Date) => void;
   visits: Visit[];
 };
 
@@ -60,13 +60,14 @@ export default function VisitsCalendar(props: VisitsCalendarProps) {
       editable={true}
       selectable={true}
       select={(e) => props.handleEventAdd(e.start, e.end, e.view.calendar)}
-      eventChange={(e) =>
-        props.handleEventChange(
-          parseInt(e.event.id!),
-          e.event.start!,
-          e.event.end!
-        )
-      }
+      eventChange={(e) => {
+        const visit = props.visits.find(
+          (visit) => visit.id.toString() === e.event.id
+        );
+        if (visit) {
+          props.handleEventChange(visit, e.event.start!, e.event.end!);
+        }
+      }}
       eventClick={(e) => {
         const visit = props.visits.find(
           (visit) => visit.id.toString() === e.event.id

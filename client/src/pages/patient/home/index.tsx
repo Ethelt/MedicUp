@@ -20,6 +20,9 @@ import VisitAddDialog, {
 import VisitInfoDialog, {
   VisitInfoDialogProps,
 } from "../../../components/visits/VisitInfoDialog";
+import VisitMoveDialog, {
+  VisitMoveDialogProps,
+} from "../../../components/visits/VisitMoveDialog";
 import VisitsCalendar from "../../../components/visits/VisitsCalendar";
 import { PatientContext } from "../../../context/PatientContext";
 
@@ -48,7 +51,7 @@ export default function PatientHome() {
     refreshVisits();
   }, [refreshVisits]);
 
-  const handleVisitAdd = useCallback(
+  const addVisit = useCallback(
     async (dto: AddVisitRequestDto) => {
       const result = await Api.post<AddVisitRequestDto, AddVisitResponseDto>(
         ApiRoutes.visit.root,
@@ -75,7 +78,7 @@ export default function PatientHome() {
     endAt: new Date(),
   });
 
-  const handleVisitCancel = useCallback(
+  const cancelVisit = useCallback(
     async (visit: Visit) => {
       const result = await Api.delete<
         CancelVisitRequestDto,
@@ -100,6 +103,41 @@ export default function PatientHome() {
     visit: null,
   });
 
+  const moveVisit = useCallback(
+    async (visitId: number, start: Date, end: Date) => {
+      const result = await Api.patch<MoveVisitRequestDto, MoveVisitResponseDto>(
+        ApiRoutes.visit.root,
+        {
+          visitId: visitId,
+          startAt: start,
+          endAt: end,
+        }
+      );
+
+      if (result.ok) {
+        refreshVisits();
+        setVisitMovePopupConfig((config) => ({ ...config, open: false }));
+      } else {
+        // @TODO: handle errors
+      }
+    },
+    [refreshVisits]
+  );
+
+  const revertVisitMove = useCallback(async () => {
+    refreshVisits();
+    setVisitMovePopupConfig((config) => ({ ...config, open: false }));
+  }, [refreshVisits]);
+
+  const [visitMovePopupConfig, setVisitMovePopupConfig] = useState<
+    Omit<VisitMoveDialogProps, "onMoveAccepted" | "onMoveCancelled">
+  >({
+    open: false,
+    visit: null,
+    newStartAt: new Date(),
+    newEndAt: new Date(),
+  });
+
   const handleEventAdd = useCallback(
     (start: Date, end: Date, calendarApi: CalendarApi) => {
       console.warn(start, end, calendarApi);
@@ -117,26 +155,6 @@ export default function PatientHome() {
     [patient]
   );
 
-  const handleEventChange = useCallback(
-    async (visitId: number, start: Date, end: Date) => {
-      const result = await Api.patch<MoveVisitRequestDto, MoveVisitResponseDto>(
-        ApiRoutes.visit.root,
-        {
-          visitId: visitId,
-          startAt: start,
-          endAt: end,
-        }
-      );
-
-      if (result.ok) {
-        refreshVisits();
-      } else {
-        // @TODO: handle errors
-      }
-    },
-    [refreshVisits]
-  );
-
   const handleEventClick = useCallback((visit: Visit) => {
     setVisitInfoPopupConfig((config) => ({
       ...config,
@@ -145,21 +163,37 @@ export default function PatientHome() {
     }));
   }, []);
 
+  const handleEventChange = useCallback(
+    (visit: Visit, newStartAt: Date, newEndAt: Date) => {
+      console.log(visit);
+      setVisitMovePopupConfig((config) => ({
+        ...config,
+        open: true,
+        visit: visit,
+        newStartAt: newStartAt,
+        newEndAt: newEndAt,
+      }));
+    },
+    []
+  );
+
   return (
     <Stack height="100%">
       <Typography variant="h2">PatientHome</Typography>
       <Box sx={{ width: "100%" }} flex={1} minHeight={0}>
         <VisitsCalendar
           handleEventAdd={handleEventAdd}
-          handleEventChange={handleEventChange}
           handleEventClick={handleEventClick}
+          handleEventChange={handleEventChange}
           visits={visits}
         />
 
-        <VisitAddDialog {...visitAddPopupConfig} onSave={handleVisitAdd} />
-        <VisitInfoDialog
-          {...visitInfoPopupConfig}
-          onCancel={handleVisitCancel}
+        <VisitAddDialog {...visitAddPopupConfig} onSave={addVisit} />
+        <VisitInfoDialog {...visitInfoPopupConfig} onCancel={cancelVisit} />
+        <VisitMoveDialog
+          {...visitMovePopupConfig}
+          onMoveAccepted={moveVisit}
+          onMoveCancelled={revertVisitMove}
         />
       </Box>
     </Stack>
