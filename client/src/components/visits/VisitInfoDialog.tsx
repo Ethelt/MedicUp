@@ -58,6 +58,11 @@ export default function VisitInfoDialog(props: VisitInfoDialogProps) {
                 <b>Notatka:</b> {props.visit.patientNote}
               </Typography>
             )}
+            {props.visit.doctorPublicNote && (
+              <Typography>
+                <b>Notatka lekarza:</b> {props.visit.doctorPublicNote}
+              </Typography>
+            )}
           </Stack>
         </DialogContent>
 
@@ -96,6 +101,11 @@ export default function VisitInfoDialog(props: VisitInfoDialogProps) {
             {props.visit.patientNote && (
               <Typography>
                 <b>Notatka:</b> {props.visit.patientNote}
+              </Typography>
+            )}
+            {props.visit.doctorPublicNote && (
+              <Typography>
+                <b>Notatka lekarza:</b> {props.visit.doctorPublicNote}
               </Typography>
             )}
           </Stack>

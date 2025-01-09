@@ -58,6 +58,16 @@ export default function DoctorVisitDialog(props: DoctorVisitDialogProps) {
                 <b>Notatka pacjenta:</b> {props.visit.patientNote}
               </Typography>
             )}
+            {props.visit.doctorPublicNote && (
+              <Typography>
+                <b>Notatka lekarza:</b> {props.visit.doctorPublicNote}
+              </Typography>
+            )}
+            {props.visit.doctorPrivateNote && (
+              <Typography>
+                <b>Notatka prywatna:</b> {props.visit.doctorPrivateNote}
+              </Typography>
+            )}
           </Stack>
         </DialogContent>
 
