@@ -28,7 +28,7 @@ export default function RegistrarLayout() {
 
   return (
     <RegistrarContext.Provider value={registrar}>
-      <Stack>
+      <Stack height="100%">
         <Typography variant="h1">Registrar</Typography>
         <Outlet />
       </Stack>

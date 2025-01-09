@@ -15,6 +15,19 @@ export class PatientService {
     return removePatientSensitiveData(patient);
   }
 
+  static async getAllPatients(): Promise<Patient[]> {
+    const db = Database.getInstance();
+    const patients = await db
+      .selectFrom("patient")
+      .selectAll()
+      .where("deactivatedAt", "is", null)
+      .orderBy("lastName", "asc")
+      .orderBy("firstName", "asc")
+      .execute();
+
+    return patients.map(removePatientSensitiveData);
+  }
+
   static async updatePatient(dto: UpdatePatientRequestDto): Promise<Patient> {
     const db = Database.getInstance();
 

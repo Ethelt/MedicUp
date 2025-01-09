@@ -13,6 +13,7 @@ import PatientHome from "./pages/patient/home";
 import PatientLayout from "./pages/patient/PatientLayout";
 import PatientProfile from "./pages/patient/profile";
 import RegistrarHome from "./pages/registrar/home";
+import RegistrarPatientView from "./pages/registrar/patient-view";
 import RegistrarLayout from "./pages/registrar/RegistrarLayout";
 
 export function Router() {
@@ -48,6 +49,10 @@ export function Router() {
         </Route>
         <Route element={<RegistrarLayout />}>
           <Route path={AppRoutes.registrar.home} element={<RegistrarHome />} />
+          <Route
+            path={AppRoutes.registrar.patientView}
+            element={<RegistrarPatientView />}
+          />
         </Route>
       </Routes>
     </BrowserRouter>

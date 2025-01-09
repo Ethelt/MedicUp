@@ -18,5 +18,6 @@ export const AppRoutes = {
   },
   registrar: {
     home: "/registrar/home",
+    patientView: "/registrar/patient/:patientId",
   },
 } as const;

@@ -11,6 +11,7 @@ export const ApiRoutes = {
     root: "/patient",
     me: "/patient/me",
     visits: "/patient/visits",
+    all: "/patient/all",
   },
   registrar: {
     me: "/registrar/me",

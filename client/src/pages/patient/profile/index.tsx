@@ -10,6 +10,8 @@ import { useContext } from "react";
 import { Api } from "../../../api";
 import { ErrorText } from "../../../components/ErrorText";
 import { PatientContext } from "../../../context/PatientContext";
+import { AppRoutes } from "../../../constants/AppRoutes";
+import { useNavigate } from "react-router";
 
 // @Task: wyświetlanie i edycja profilu pacjenta; na razie tylko wygląd
 // nie musisz zmieniać nic poza tym plikiem
@@ -26,7 +28,7 @@ type PatientProfileForm = {
 export default function PatientProfile() {
   // tutaj jest trzymany pacjent po tym jak się zalogował
   const { patient, refresh } = useContext(PatientContext);
-
+  const navigate = useNavigate();
   // tutaj jest formularz
   const form = useForm<PatientProfileForm>({
     // tutaj są dane domyślne
@@ -58,6 +60,7 @@ export default function PatientProfile() {
 
       if (result.ok) {
         refresh();
+        navigate(AppRoutes.patient.home);
       } else {
         console.error("Failed to update patient:", result.error);
       }

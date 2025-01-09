@@ -1,5 +1,7 @@
 import {
   ApiRoutes,
+  GetAllPatientsRequestDto,
+  GetAllPatientsResponseDto,
   GetPatientRequestDto,
   GetPatientResponseDto,
   GetVisitsForPatientRequestDto,
@@ -15,9 +17,10 @@ import { PatientService } from "./patient.service";
 export class PatientController {
   static registerRoutes(app: Express) {
     app.get(ApiRoutes.patient.root, this.getPatient);
+    app.patch(ApiRoutes.patient.root, this.updatePatient);
     app.get(ApiRoutes.patient.me, this.getMe);
     app.get(ApiRoutes.patient.visits, this.getVisitsForPatient);
-    app.patch(ApiRoutes.patient.root, this.updatePatient);
+    app.get(ApiRoutes.patient.all, this.getAllPatients);
   }
 
   private static async getMe(req: Request, res: Response) {
@@ -33,6 +36,14 @@ export class PatientController {
   ) {
     const patient = await PatientService.getPatient(req.query.patientId);
     res.json({ patient });
+  }
+
+  private static async getAllPatients(
+    req: Request<{}, {}, {}, GetAllPatientsRequestDto>,
+    res: Response<GetAllPatientsResponseDto>
+  ) {
+    const patients = await PatientService.getAllPatients();
+    res.json({ patients });
   }
 
   private static async getVisitsForPatient(
