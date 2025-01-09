@@ -1,7 +1,13 @@
+import {
+  ApiRoutes,
+  UpdatePatientRequestDto,
+  UpdatePatientResponseDto,
+} from "@medicup/shared";
 import { LoadingButton } from "@mui/lab";
 import { Stack, TextField } from "@mui/material";
 import { useForm } from "@tanstack/react-form";
 import { useContext } from "react";
+import { Api } from "../../../api";
 import { ErrorText } from "../../../components/ErrorText";
 import { PatientContext } from "../../../context/PatientContext";
 
@@ -19,7 +25,7 @@ type PatientProfileForm = {
 
 export default function PatientProfile() {
   // tutaj jest trzymany pacjent po tym jak się zalogował
-  const { patient } = useContext(PatientContext);
+  const { patient, refresh } = useContext(PatientContext);
 
   // tutaj jest formularz
   const form = useForm<PatientProfileForm>({
@@ -34,7 +40,27 @@ export default function PatientProfile() {
     // tutaj jest funkcja która się wywołuje po zapisaniu formularza
     // nic tu na razie nie zmieniaj
     onSubmit: async (values) => {
-      console.log("Form submitted with values:", values.value);
+      if (!patient) return;
+
+      const dto: UpdatePatientRequestDto = {
+        patientId: patient.id,
+        firstName: values.value.firstName,
+        lastName: values.value.lastName,
+        email: values.value.email,
+        phone: values.value.phoneNumber,
+        pesel: values.value.pesel,
+      };
+
+      const result = await Api.patch<
+        UpdatePatientRequestDto,
+        UpdatePatientResponseDto
+      >(ApiRoutes.patient.root, dto);
+
+      if (result.ok) {
+        refresh();
+      } else {
+        console.error("Failed to update patient:", result.error);
+      }
     },
   });
 
