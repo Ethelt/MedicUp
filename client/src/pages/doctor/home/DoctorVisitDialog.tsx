@@ -7,6 +7,8 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
+import { useNavigate } from "react-router";
+import { AppRoutes } from "../../../constants/AppRoutes";
 import { formatVisitDateRange } from "../../../utils/dates";
 
 export type DoctorVisitDialogProps = {
@@ -17,7 +19,18 @@ export type DoctorVisitDialogProps = {
 };
 
 export default function DoctorVisitDialog(props: DoctorVisitDialogProps) {
-  const handleOpenPatientDetails = async () => {};
+  const navigate = useNavigate();
+
+  const handleOpenPatientDetails = async () => {
+    if (!props.visit) return;
+
+    navigate(
+      AppRoutes.doctor.patientDetails.replace(
+        ":patientId",
+        props.visit.patient.id.toString()
+      )
+    );
+  };
 
   if (!props.visit) return null;
 

@@ -1,6 +1,6 @@
 import {
   AddVisitRequestDto,
-  MoveVisitRequestDto,
+  UpdateVisitRequestDto,
   Visit,
 } from "@medicup/shared";
 import { Database } from "../../database/database";
@@ -155,12 +155,20 @@ export class VisitService {
     };
   }
 
-  static async moveVisit(dto: MoveVisitRequestDto): Promise<Visit> {
+  static async updateVisit(dto: UpdateVisitRequestDto): Promise<Visit> {
     const db = Database.getInstance();
 
     const visit = await db
       .updateTable("visit")
-      .set({ startAt: new Date(dto.startAt), endAt: new Date(dto.endAt) })
+      .$if(!!dto.startAt, (qb) => qb.set({ startAt: new Date(dto.startAt!) }))
+      .$if(!!dto.endAt, (qb) => qb.set({ endAt: new Date(dto.endAt!) }))
+      .$if(!!dto.patientNote, (qb) => qb.set({ patientNote: dto.patientNote }))
+      .$if(!!dto.doctorPublicNote, (qb) =>
+        qb.set({ doctorPublicNote: dto.doctorPublicNote })
+      )
+      .$if(!!dto.doctorPrivateNote, (qb) =>
+        qb.set({ doctorPrivateNote: dto.doctorPrivateNote })
+      )
       .where("id", "=", dto.visitId)
       .returningAll()
       .executeTakeFirstOrThrow();

@@ -7,8 +7,8 @@ import {
   CancelVisitResponseDto,
   GetVisitsForPatientRequestDto,
   GetVisitsForPatientResponseDto,
-  MoveVisitRequestDto,
-  MoveVisitResponseDto,
+  UpdateVisitRequestDto,
+  UpdateVisitResponseDto,
   Visit,
 } from "@medicup/shared";
 import { Box, Stack, Typography } from "@mui/material";
@@ -105,14 +105,14 @@ export default function PatientHome() {
 
   const moveVisit = useCallback(
     async (visitId: number, start: Date, end: Date) => {
-      const result = await Api.patch<MoveVisitRequestDto, MoveVisitResponseDto>(
-        ApiRoutes.visit.root,
-        {
-          visitId: visitId,
-          startAt: start,
-          endAt: end,
-        }
-      );
+      const result = await Api.patch<
+        UpdateVisitRequestDto,
+        UpdateVisitResponseDto
+      >(ApiRoutes.visit.root, {
+        visitId: visitId,
+        startAt: start,
+        endAt: end,
+      });
 
       if (result.ok) {
         refreshVisits();

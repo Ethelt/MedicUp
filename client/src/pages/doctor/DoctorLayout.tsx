@@ -29,7 +29,14 @@ export default function DoctorLayout() {
   return (
     <DoctorContext.Provider value={{ doctor }}>
       <Stack height="100%">
-        <Typography variant="h1">Doctor</Typography>
+        <Stack
+          direction="row"
+          alignItems="center"
+          justifyContent="space-between"
+          p={2}
+        >
+          <Typography variant="h5">Doctor</Typography>
+        </Stack>
         <Outlet />
       </Stack>
     </DoctorContext.Provider>

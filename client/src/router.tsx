@@ -8,6 +8,7 @@ import Register from "./pages/auth/Register";
 import RegistrarLogin from "./pages/auth/RegistrarLogin";
 import DoctorLayout from "./pages/doctor/DoctorLayout";
 import DoctorHome from "./pages/doctor/home";
+import DoctorPatientDetails from "./pages/doctor/patient-details";
 import PatientHome from "./pages/patient/home";
 import PatientLayout from "./pages/patient/PatientLayout";
 import PatientProfile from "./pages/patient/profile";
@@ -40,6 +41,10 @@ export function Router() {
         </Route>
         <Route element={<DoctorLayout />}>
           <Route path={AppRoutes.doctor.home} element={<DoctorHome />} />
+          <Route
+            path={AppRoutes.doctor.patientDetails}
+            element={<DoctorPatientDetails />}
+          />
         </Route>
         <Route element={<RegistrarLayout />}>
           <Route path={AppRoutes.registrar.home} element={<RegistrarHome />} />

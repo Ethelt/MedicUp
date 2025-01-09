@@ -8,6 +8,7 @@ export const ApiRoutes = {
     logout: "/auth/logout",
   },
   patient: {
+    root: "/patient",
     me: "/patient/me",
     visits: "/patient/visits",
   },

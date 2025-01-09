@@ -4,8 +4,8 @@ import {
   ApiRoutes,
   CancelVisitRequestDto,
   CancelVisitResponseDto,
-  MoveVisitRequestDto,
-  MoveVisitResponseDto,
+  UpdateVisitRequestDto,
+  UpdateVisitResponseDto,
 } from "@medicup/shared";
 import { Express, Request, Response } from "express";
 import { getSessionData } from "../../utils/session-data";
@@ -15,7 +15,7 @@ export class VisitController {
   static registerRoutes(app: Express) {
     app.post(ApiRoutes.visit.root, this.addVisit);
     app.delete(ApiRoutes.visit.root, this.cancelVisit);
-    app.patch(ApiRoutes.visit.root, this.moveVisit);
+    app.patch(ApiRoutes.visit.root, this.updateVisit);
   }
 
   private static async addVisit(
@@ -47,11 +47,11 @@ export class VisitController {
     res.json({ visit });
   }
 
-  private static async moveVisit(
-    req: Request<{}, {}, MoveVisitRequestDto>,
-    res: Response<MoveVisitResponseDto>
+  private static async updateVisit(
+    req: Request<{}, {}, UpdateVisitRequestDto>,
+    res: Response<UpdateVisitResponseDto>
   ) {
-    const visit = await VisitService.moveVisit(req.body);
+    const visit = await VisitService.updateVisit(req.body);
     res.json({ visit });
   }
 }

@@ -14,6 +14,7 @@ export const AppRoutes = {
   },
   doctor: {
     home: "/doctor/home",
+    patientDetails: "/doctor/patient/:patientId",
   },
   registrar: {
     home: "/registrar/home",

@@ -1,5 +1,7 @@
 import {
   ApiRoutes,
+  GetPatientRequestDto,
+  GetPatientResponseDto,
   GetVisitsForPatientRequestDto,
   GetVisitsForPatientResponseDto,
 } from "@medicup/shared";
@@ -10,6 +12,7 @@ import { PatientService } from "./patient.service";
 
 export class PatientController {
   static registerRoutes(app: Express) {
+    app.get(ApiRoutes.patient.root, this.getPatient);
     app.get(ApiRoutes.patient.me, this.getMe);
     app.get(ApiRoutes.patient.visits, this.getVisitsForPatient);
   }
@@ -17,25 +20,23 @@ export class PatientController {
   private static async getMe(req: Request, res: Response) {
     const sessionData = getSessionData(req.session);
 
-    const patient = await PatientService.getMe(sessionData);
+    const patient = await PatientService.getPatient(sessionData.userId);
     res.json(patient);
+  }
+
+  private static async getPatient(
+    req: Request<{}, {}, {}, GetPatientRequestDto>,
+    res: Response<GetPatientResponseDto>
+  ) {
+    const patient = await PatientService.getPatient(req.query.patientId);
+    res.json({ patient });
   }
 
   private static async getVisitsForPatient(
     req: Request<{}, {}, {}, GetVisitsForPatientRequestDto>,
     res: Response<GetVisitsForPatientResponseDto>
   ) {
-    const sessionData = getSessionData(req.session);
     const requestedPatientId = parseInt(req.query.patientId.toString());
-
-    const hasPermissions =
-      sessionData.userId === requestedPatientId ||
-      sessionData.userType === "registrar";
-
-    if (!hasPermissions) {
-      throw new Error("Unauthorized");
-    }
-
     const visits = await VisitService.getVisitsForPatient(requestedPatientId);
     res.json({ visits });
   }

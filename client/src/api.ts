@@ -110,7 +110,7 @@ export class Api {
   }
 }
 
-const isoDateFormat = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d*)?$/;
+const isoDateFormat = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d*\w+)?$/;
 
 function isIsoDateString(value: unknown): boolean {
   return !!value && typeof value === "string" && isoDateFormat.test(value);
@@ -124,6 +124,7 @@ export function handleDates(body: any) {
   for (const key of Object.keys(body)) {
     const value = body[key];
     if (isIsoDateString(value)) body[key] = parseISO(value);
+    else if (Array.isArray(value)) value.forEach(handleDates);
     else if (typeof value === "object") handleDates(value);
   }
 }
