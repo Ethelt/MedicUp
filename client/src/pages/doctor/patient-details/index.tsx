@@ -8,7 +8,7 @@ import {
   Visit,
 } from "@medicup/shared";
 import { Box, Stack, Typography } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Navigate, useParams } from "react-router";
 import { Api } from "../../../api";
 import { AppRoutes } from "../../../constants/AppRoutes";
@@ -34,20 +34,22 @@ export default function DoctorPatientDetails() {
     })();
   }, [patientId]);
 
-  useEffect(() => {
-    (async () => {
-      if (!patientId) return;
+  const refreshVisits = useCallback(async () => {
+    if (!patientId) return;
 
-      const response = await Api.get<
-        GetVisitsForPatientRequestDto,
-        GetVisitsForPatientResponseDto
-      >(ApiRoutes.patient.visits, { patientId: parseInt(patientId) });
+    const response = await Api.get<
+      GetVisitsForPatientRequestDto,
+      GetVisitsForPatientResponseDto
+    >(ApiRoutes.patient.visits, { patientId: parseInt(patientId) });
 
-      if (response.ok) {
-        setVisits(response.data.visits);
-      }
-    })();
+    if (response.ok) {
+      setVisits(response.data.visits);
+    }
   }, [patientId]);
+
+  useEffect(() => {
+    refreshVisits();
+  }, [refreshVisits]);
 
   if (!patientId) {
     return <Navigate to={AppRoutes.doctor.home} />;
@@ -79,7 +81,7 @@ export default function DoctorPatientDetails() {
         gap={2}
       >
         {visits.map((visit) => (
-          <VisitCard visit={visit} key={visit.id} />
+          <VisitCard visit={visit} key={visit.id} onUpdate={refreshVisits} />
         ))}
       </Box>
     </Stack>

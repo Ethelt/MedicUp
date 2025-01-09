@@ -22,6 +22,7 @@ export class VisitService {
         "patient.lastName as patientLastName",
       ])
       .where("patientId", "=", patientId)
+      .orderBy("startAt", "desc")
       .execute();
 
     const visits = visitsWithData.map((visit) => {
@@ -59,6 +60,7 @@ export class VisitService {
         "patient.lastName as patientLastName",
       ])
       .where("doctorId", "=", doctorId)
+      .orderBy("startAt", "desc")
       .execute();
 
     const visits = visitsWithData.map((visit) => {
