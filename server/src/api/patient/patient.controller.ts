@@ -4,6 +4,8 @@ import {
   GetPatientResponseDto,
   GetVisitsForPatientRequestDto,
   GetVisitsForPatientResponseDto,
+  UpdatePatientRequestDto,
+  UpdatePatientResponseDto,
 } from "@medicup/shared";
 import { Express, Request, Response } from "express";
 import { getSessionData } from "../../utils/session-data";
@@ -15,6 +17,7 @@ export class PatientController {
     app.get(ApiRoutes.patient.root, this.getPatient);
     app.get(ApiRoutes.patient.me, this.getMe);
     app.get(ApiRoutes.patient.visits, this.getVisitsForPatient);
+    app.patch(ApiRoutes.patient.root, this.updatePatient);
   }
 
   private static async getMe(req: Request, res: Response) {
@@ -39,5 +42,13 @@ export class PatientController {
     const requestedPatientId = parseInt(req.query.patientId.toString());
     const visits = await VisitService.getVisitsForPatient(requestedPatientId);
     res.json({ visits });
+  }
+
+  private static async updatePatient(
+    req: Request<{}, {}, UpdatePatientRequestDto>,
+    res: Response<UpdatePatientResponseDto>
+  ) {
+    const patient = await PatientService.updatePatient(req.body);
+    res.json({ patient });
   }
 }
