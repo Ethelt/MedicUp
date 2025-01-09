@@ -8,6 +8,7 @@ export type UpdatePatientRequestDto = {
   phone?: string;
   pesel?: string;
   passportNumber?: string;
+  note?: string;
 };
 
 export type UpdatePatientResponseDto = {
