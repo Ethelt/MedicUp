@@ -6,6 +6,8 @@ import { Api } from "../../api";
 import { AppRoutes } from "../../constants/AppRoutes";
 import { DoctorContext } from "../../context/DoctorContext";
 
+import logo from "../../assets/mlogo.svg";
+
 export default function DoctorLayout() {
   const [doctor, setDoctor] = useState<Doctor | null>(null);
   const navigate = useNavigate();
@@ -29,6 +31,20 @@ export default function DoctorLayout() {
   return (
     <DoctorContext.Provider value={{ doctor }}>
       <Stack height="100%">
+        {/* Add the new div with the logo and buttons here */}
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "10px 0" }}>
+          <img
+            src={logo}
+            alt="Logo"
+            style={{ width: "50px", height: "50px", borderRadius: "5px" }}
+          />
+          <div>
+            <button>Button 1</button>
+            <button>Button 2</button>
+            <button>Button 3</button>
+          </div>
+        </div>
+
         <Stack
           direction="row"
           alignItems="center"

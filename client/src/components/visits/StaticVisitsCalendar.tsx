@@ -5,8 +5,6 @@ import timeGridPlugin from "@fullcalendar/timegrid";
 import { Visit } from "@medicup/shared";
 import { useMemo } from "react";
 
-import logo from "../../assets/mlogo.svg";
-
 type StaticVisitsCalendarProps = {
   handleEventClick: (visit: Visit) => void;
   visits: Visit[];
@@ -29,19 +27,6 @@ export default function StaticVisitsCalendar(props: StaticVisitsCalendarProps) {
 
   return (
     <div style={{ width: "100%", height: "100%" }}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "10px 0" }}>
-        <img
-          src={logo}
-          alt="Logo"
-          style={{ width: "50px", height: "50px", borderRadius: "5px" }}
-        />
-        <div>
-          <button>Button 1</button>
-          <button>Button 2</button>
-          <button>Button 3</button>
-        </div>
-      </div>
-
       <div style={{ marginTop: 0, paddingTop: 0, height: 'calc(100% - 50px)' }}>
         <FullCalendar
           height="100%"
