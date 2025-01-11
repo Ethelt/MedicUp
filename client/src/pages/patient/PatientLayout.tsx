@@ -84,7 +84,16 @@ export default function PatientLayout() {
                   target.style.color = "black";
                 }}
               >
-                Home
+                <Box
+                  sx={{
+                    display: "inline-block",
+                    padding: "5px 10px",
+                    backgroundColor: "rgba(0, 0, 0, 0.1)", // Faint grey background
+                    borderRadius: "5px", // Optional: rounded corners
+                  }}
+                >
+                  Kalendarz Wizyt
+                </Box>
               </Link>
             </Typography>
             <Typography variant="h6">
@@ -104,7 +113,16 @@ export default function PatientLayout() {
                   target.style.color = "black";
                 }}
               >
-                Profile
+                <Box
+                  sx={{
+                    display: "inline-block",
+                    padding: "5px 10px",
+                    backgroundColor: "rgba(0, 0, 0, 0.1)", // Faint grey background
+                    borderRadius: "5px", // Optional: rounded corners
+                  }}
+                >
+                  Mój Profil
+                </Box>
               </Link>
             </Typography>
 
