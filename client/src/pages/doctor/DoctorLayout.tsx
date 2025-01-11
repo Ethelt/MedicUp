@@ -42,12 +42,12 @@ export default function DoctorLayout() {
             <button style={{
               backgroundColor: 'black',
               color: 'white',
-              padding: '6px 40px',  // Increased padding for a longer rectangle
+              padding: '6px 40px',
               border: 'none',
               borderRadius: '5px',
               cursor: 'pointer',
-              marginRight: '10px',   // Added right margin
-              fontSize: '18px'      // Increased font size
+              marginRight: '10px',
+              fontSize: '18px'
             }}>
               Wyloguj
             </button>

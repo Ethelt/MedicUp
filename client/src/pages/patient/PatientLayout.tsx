@@ -1,20 +1,23 @@
 import { ApiRoutes, Patient } from "@medicup/shared";
 import { Instagram, LinkedIn, Twitter, YouTube } from "@mui/icons-material";
-import { Box, Stack, Typography } from "@mui/material";
+import { Box, Button, Stack, Typography } from "@mui/material";
 import { useCallback, useEffect, useState } from "react";
 import { Link, Outlet, useNavigate } from "react-router";
 import { Api } from "../../api";
 import { AppRoutes } from "../../constants/AppRoutes";
 import { PatientContext } from "../../context/PatientContext";
 
-// @Task: zrobienie ładnego headera z nawigacją do różnych stron pacjenta
-// wystarczy edytować tylko jedno miejsce w tym pliku, jest komentarz gdzie
-
 export default function PatientLayout() {
   const [patient, setPatient] = useState<Patient | null>(null);
   const navigate = useNavigate();
 
-  // tym się nie przejmuj
+  // funkcja do wylogowania
+  const logout = useCallback(async () => {
+    await Api.post(ApiRoutes.auth.logout, {}); // zakładając, że istnieje endpoint do wylogowania
+    navigate(AppRoutes.auth.login.patient); // przekierowanie na stronę logowania
+  }, [navigate]);
+
+  // Fetch pacjenta
   const fetchPatient = useCallback(async () => {
     const response = await Api.get<undefined, Patient>(
       ApiRoutes.patient.me,
@@ -28,13 +31,11 @@ export default function PatientLayout() {
     }
   }, [navigate]);
 
-  // tym się nie przejmuj
   useEffect(() => {
     fetchPatient();
   }, [fetchPatient]);
 
   return (
-    // tym Context tez się nie przejmuj
     <PatientContext.Provider value={{ patient, refresh: fetchPatient }}>
       <Stack height="100vh" direction="column">
         {/* Header */}
@@ -46,7 +47,7 @@ export default function PatientLayout() {
           border="2px solid lightgrey"
           borderRadius={1}
         >
-          {/* Zamienione logo */}
+          {/* Logo */}
           <svg
             width="70px"
             height="70px"
@@ -65,7 +66,7 @@ export default function PatientLayout() {
             </g>
           </svg>
 
-          <Stack direction="row" gap={2}>
+          <Stack direction="row" gap={2} alignItems="center">
             <Typography variant="h6">
               <Link
                 to={AppRoutes.patient.home}
@@ -106,10 +107,19 @@ export default function PatientLayout() {
                 Profile
               </Link>
             </Typography>
+
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={logout}
+            >
+              Wyloguj
+            </Button>
+
+
           </Stack>
         </Stack>
 
-        {/* Main content */}
         <Box
           flexGrow={1}
           overflow="auto"
@@ -130,13 +140,13 @@ function Footer() {
     <Box
       component="footer"
       sx={{
-        padding: "10px", // Zmniejszenie paddingu
+        padding: "10px",
         borderTop: "1px solid #ccc",
         display: "flex",
         justifyContent: "space-between",
         alignItems: "flex-start",
         backgroundColor: "#f9f9f9",
-        fontSize: "14px", // Globalne zmniejszenie tekstu
+        fontSize: "14px",
       }}
     >
       <Stack direction="row" spacing={1}>
@@ -146,16 +156,16 @@ function Footer() {
         <a href="https://instagram.com" target="_blank" rel="noopener">
           <Instagram sx={{ fontSize: 20, color: "black" }} />
         </a>
-        <a href="https://instagram.com" target="_blank" rel="noopener">
-          <LinkedIn sx={{ fontSize: 20, color: "black" }} />
-        </a>
-        <a href="https://instagram.com" target="_blank" rel="noopener">
+        <a href="https://youtube.com" target="_blank" rel="noopener">
           <YouTube sx={{ fontSize: 20, color: "black" }} />
+        </a>
+        <a href="https://linkedin.com" target="_blank" rel="noopener">
+          <LinkedIn sx={{ fontSize: 20, color: "black" }} />
         </a>
       </Stack>
 
       <Box>
-        <Typography variant="subtitle2" sx={{ fontWeight: "bold" }}> {/* Zmniejszenie stylu tekstu */}
+        <Typography variant="subtitle2" sx={{ fontWeight: "bold" }}>
           Kontakt
         </Typography>
         <Typography sx={{ fontSize: "12px" }}>adres.biuro@example.com</Typography>
