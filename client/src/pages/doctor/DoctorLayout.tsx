@@ -88,43 +88,44 @@ function Footer() {
     <Box
       component="footer"
       sx={{
-        padding: "2rem",
+        padding: "10px",
         borderTop: "1px solid #ccc",
         display: "flex",
         justifyContent: "space-between",
         alignItems: "flex-start",
         backgroundColor: "#f9f9f9",
+        fontSize: "14px",
       }}
     >
-      <Stack direction="row" spacing={2}>
+      <Stack direction="row" spacing={1}>
         <Link href="https://twitter.com" target="_blank" rel="noopener">
-          <Twitter sx={{ fontSize: 24, color: "black" }} />
+          <Twitter sx={{ fontSize: 20, color: "black" }} />
         </Link>
         <Link href="https://instagram.com" target="_blank" rel="noopener">
-          <Instagram sx={{ fontSize: 24, color: "black" }} />
+          <Instagram sx={{ fontSize: 20, color: "black" }} />
         </Link>
         <Link href="https://youtube.com" target="_blank" rel="noopener">
-          <YouTube sx={{ fontSize: 24, color: "black" }} />
+          <YouTube sx={{ fontSize: 20, color: "black" }} />
         </Link>
         <Link href="https://linkedin.com" target="_blank" rel="noopener">
-          <LinkedIn sx={{ fontSize: 24, color: "black" }} />
+          <LinkedIn sx={{ fontSize: 20, color: "black" }} />
         </Link>
       </Stack>
 
       <Box>
-        <Typography variant="h6" sx={{ fontWeight: "bold" }}>
+        <Typography variant="subtitle2" sx={{ fontWeight: "bold" }}>
           Kontakt
         </Typography>
-        <Typography>adres.biuro@example.com</Typography>
-        <Typography>+48 111 222 333</Typography>
+        <Typography sx={{ fontSize: "12px" }}>adres.biuro@example.com</Typography>
+        <Typography sx={{ fontSize: "12px" }}>+48 111 222 333</Typography>
       </Box>
 
       <Box>
-        <Typography variant="h6" sx={{ fontWeight: "bold" }}>
+        <Typography variant="subtitle2" sx={{ fontWeight: "bold" }}>
           Adres
         </Typography>
-        <Typography>ul. Floriańska 15</Typography>
-        <Typography>31-019, Kraków</Typography>
+        <Typography sx={{ fontSize: "12px" }}>ul. Floriańska 15</Typography>
+        <Typography sx={{ fontSize: "12px" }}>31-019, Kraków</Typography>
       </Box>
     </Box>
   );
