@@ -10,7 +10,7 @@ export default function PatientHome() {
 
   return (
     <Stack height="100%">
-      <Typography variant="h2">PatientHome</Typography>
+      <Typography variant="h2"></Typography>
       <PatientCalendar patient={patient} />
     </Stack>
   );
