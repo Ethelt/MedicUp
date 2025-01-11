@@ -1,6 +1,6 @@
 import { ApiRoutes, Doctor } from "@medicup/shared";
 import { Instagram, LinkedIn, Twitter, YouTube } from "@mui/icons-material";
-import { Box, Button, Link, Stack, Typography } from "@mui/material";
+import { Box, Button, Stack, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { Outlet, useNavigate } from "react-router";
 import { Api } from "../../api";
@@ -31,38 +31,37 @@ export default function DoctorLayout() {
 
   return (
     <DoctorContext.Provider value={{ doctor }}>
-      <Stack height="100%">
+      <Stack height="100vh" direction="column">
         {/* Header */}
-        <header>
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-              padding: "1rem",
-              backgroundColor: "#ffffff",
-              border: "2px solid lightgrey",
-            }}
+        <Stack
+          direction="row"
+          justifyContent="space-between"
+          alignItems="center"
+          padding={2}
+          border="2px solid lightgrey"
+          borderRadius={1}
+        >
+          {/* Logo */}
+          <svg
+            width="70px"
+            height="70px"
+            viewBox="0 0 193 229"
+            xmlns="http://www.w3.org/2000/svg"
           >
-            {/* Logo */}
-            <Box sx={{ marginRight: "1rem", width: "50px", height: "auto" }}>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 193 229"
-                width="100%"
-                height="100%"
-              >
-                <path
-                  style={{ fill: "#3765ff", fillOpacity: 1 }}
-                  d="M 0.3001292,75.380593 H 37.953427 L 57.972755,0.667449 109.93747,194.60242 138.49254,88.03344 h 55.06891 v 7.71067 H 145.53428 L 109.69998,229.47956 57.942579,36.318323 45.251496,83.68209 H 0.3001292 Z"
-                />
-              </svg>
-            </Box>
+            <g>
+              <path
+                style={{
+                  fill: "#3765ff",
+                  fillOpacity: 1,
+                  strokeWidth: 0.264583,
+                }}
+                d="M 0.3001292,75.380593 H 37.953427 L 57.972755,0.667449 109.93747,194.60242 138.49254,88.03344 h 55.06891 v 7.71067 H 145.53428 L 109.69998,229.47956 57.942579,36.318323 45.251496,83.68209 H 0.3001292 Z"
+              />
+            </g>
+          </svg>
 
-            {/* Title */}
-            <Typography variant="h4" component="div"></Typography>
-
-            {/* Logout Button */}
+          {/* Buttons */}
+          <Stack direction="row" gap={2} alignItems="center">
             <Button
               variant="contained"
               sx={{ backgroundColor: "black", color: "white", '&:hover': { backgroundColor: "#333" } }}
@@ -70,12 +69,12 @@ export default function DoctorLayout() {
             >
               Wyloguj
             </Button>
-          </Box>
-        </header>
-
-        <Stack flex="1" overflow="auto">
-          <Outlet />
+          </Stack>
         </Stack>
+
+        <Box flexGrow={1} overflow="auto" position="relative" paddingBottom="50px">
+          <Outlet />
+        </Box>
 
         <Footer />
       </Stack>
@@ -98,18 +97,18 @@ function Footer() {
       }}
     >
       <Stack direction="row" spacing={1}>
-        <Link href="https://twitter.com" target="_blank" rel="noopener">
+        <a href="https://twitter.com" target="_blank" rel="noopener">
           <Twitter sx={{ fontSize: 20, color: "black" }} />
-        </Link>
-        <Link href="https://instagram.com" target="_blank" rel="noopener">
+        </a>
+        <a href="https://instagram.com" target="_blank" rel="noopener">
           <Instagram sx={{ fontSize: 20, color: "black" }} />
-        </Link>
-        <Link href="https://youtube.com" target="_blank" rel="noopener">
+        </a>
+        <a href="https://youtube.com" target="_blank" rel="noopener">
           <YouTube sx={{ fontSize: 20, color: "black" }} />
-        </Link>
-        <Link href="https://linkedin.com" target="_blank" rel="noopener">
+        </a>
+        <a href="https://linkedin.com" target="_blank" rel="noopener">
           <LinkedIn sx={{ fontSize: 20, color: "black" }} />
-        </Link>
+        </a>
       </Stack>
 
       <Box>
