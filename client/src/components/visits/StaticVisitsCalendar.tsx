@@ -48,7 +48,7 @@ export default function StaticVisitsCalendar(props: StaticVisitsCalendarProps) {
       editable={false}
       selectable={false}
       headerToolbar={{
-        start: "",
+        start: "prev,next today",
         center: "title",
         end: "",
       }}
