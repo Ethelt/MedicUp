@@ -1,3 +1,4 @@
+import dayGridPlugin from "@fullcalendar/daygrid"; // Plugin for month view
 import interactionPlugin from "@fullcalendar/interaction";
 import FullCalendar from "@fullcalendar/react";
 import timeGridPlugin from "@fullcalendar/timegrid";
@@ -8,6 +9,8 @@ type StaticVisitsCalendarProps = {
   handleEventClick: (visit: Visit) => void;
   visits: Visit[];
 };
+
+const cancelledVisitColor = "grey";
 
 export default function StaticVisitsCalendar(props: StaticVisitsCalendarProps) {
   const events = useMemo(
@@ -23,46 +26,57 @@ export default function StaticVisitsCalendar(props: StaticVisitsCalendarProps) {
   );
 
   return (
-    <FullCalendar
-      height={"100%"}
-      plugins={[timeGridPlugin, interactionPlugin]}
-      duration={{ week: 1 }}
-      allDaySlot={false}
-      slotMinTime={"06:00:00"}
-      slotMaxTime={"20:00:00"}
-      firstDay={1}
-      initialView="timeGrid"
-      slotLabelFormat={{
-        hour: "2-digit",
-        minute: "2-digit",
-        hour12: false,
-      }}
-      dayHeaderFormat={{
-        weekday: "short",
-        day: "numeric",
-        month: "short",
-        omitCommas: true,
-      }}
-      selectConstraint={{ startTime: "06:00:00", endTime: "20:00:00" }}
-      locale="pl"
-      editable={false}
-      selectable={false}
-      headerToolbar={{
-        start: "prev,next today",
-        center: "title",
-        end: "",
-      }}
-      eventClick={(e) => {
-        const visit = props.visits.find(
-          (visit) => visit.id.toString() === e.event.id
-        );
-        if (visit && !visit.cancelledAt) {
-          props.handleEventClick(visit);
-        }
-      }}
-      events={events}
-    />
+    <div style={{ width: "100%", height: "100%" }}>
+      <FullCalendar
+        height="100%"
+        plugins={[timeGridPlugin, interactionPlugin, dayGridPlugin]} // Added dayGridPlugin for month view
+        initialView="timeGridWeek" // Default view
+        views={{
+          timeGridDay: {
+            type: "timeGrid",
+            duration: { days: 1 },
+            buttonText: "Dzień", // Day view button
+          },
+          timeGridWeek: {
+            type: "timeGrid",
+            duration: { weeks: 1 },
+            buttonText: "Tydzień", // Week view button
+          },
+          dayGridMonth: {
+            type: "dayGrid",
+            duration: { months: 1 },
+            buttonText: "Miesiąc", // Month view button
+          },
+        }}
+        headerToolbar={{
+          start: "prev,next today", // Navigation buttons
+          center: "title", // Centered title
+          end: "timeGridDay,timeGridWeek,dayGridMonth", // Buttons for view selection
+        }}
+        slotLabelFormat={{
+          hour: "2-digit",
+          minute: "2-digit",
+          hour12: false,
+        }}
+        dayHeaderFormat={{
+          weekday: "short",
+          day: "numeric",
+          month: "short",
+          omitCommas: true,
+        }}
+        locale="pl"
+        editable={false}
+        selectable={false}
+        events={events}
+        eventClick={(e) => {
+          const visit = props.visits.find(
+            (visit) => visit.id.toString() === e.event.id
+          );
+          if (visit && !visit.cancelledAt) {
+            props.handleEventClick(visit);
+          }
+        }}
+      />
+    </div>
   );
 }
-
-const cancelledVisitColor = "grey";
