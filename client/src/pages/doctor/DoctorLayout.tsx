@@ -39,9 +39,18 @@ export default function DoctorLayout() {
             style={{ width: "50px", height: "50px", borderRadius: "5px" }}
           />
           <div>
-            <button>Button 1</button>
-            <button>Button 2</button>
-            <button>Button 3</button>
+            <button style={{
+              backgroundColor: 'black',
+              color: 'white',
+              padding: '6px 40px',  // Increased padding for a longer rectangle
+              border: 'none',
+              borderRadius: '5px',
+              cursor: 'pointer',
+              marginRight: '10px',   // Added right margin
+              fontSize: '18px'      // Increased font size
+            }}>
+              Wyloguj
+            </button>
           </div>
         </div>
 
