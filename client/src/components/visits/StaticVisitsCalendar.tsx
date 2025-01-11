@@ -47,6 +47,11 @@ export default function StaticVisitsCalendar(props: StaticVisitsCalendarProps) {
       locale="pl"
       editable={false}
       selectable={false}
+      headerToolbar={{
+        start: "",
+        center: "title",
+        end: "",
+      }}
       eventClick={(e) => {
         const visit = props.visits.find(
           (visit) => visit.id.toString() === e.event.id
