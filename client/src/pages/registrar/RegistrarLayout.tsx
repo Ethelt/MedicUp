@@ -67,7 +67,7 @@ export default function RegistrarLayout() {
             {/* Logout Button */}
             <Button
               variant="contained"
-              color="primary"
+              sx={{ backgroundColor: "black", color: "white", '&:hover': { backgroundColor: "#333" } }}
               onClick={handleLogout}
             >
               Wyloguj

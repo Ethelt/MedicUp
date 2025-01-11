@@ -110,7 +110,7 @@ export default function PatientLayout() {
 
             <Button
               variant="contained"
-              color="primary"
+              sx={{ backgroundColor: "black", color: "white", '&:hover': { backgroundColor: "#333" } }}
               onClick={logout}
             >
               Wyloguj
