@@ -1,5 +1,5 @@
 import { ApiRoutes, Doctor } from "@medicup/shared";
-import { Stack, Typography } from "@mui/material";
+import { Stack } from "@mui/material";
 import { useEffect, useState } from "react";
 import { Outlet, useNavigate } from "react-router";
 import { Api } from "../../api";
@@ -35,7 +35,6 @@ export default function DoctorLayout() {
           justifyContent="space-between"
           p={2}
         >
-          <Typography variant="h5">Doctor</Typography>
         </Stack>
         <Outlet />
       </Stack>

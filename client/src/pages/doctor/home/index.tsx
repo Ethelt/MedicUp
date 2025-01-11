@@ -6,7 +6,7 @@ import {
   GetVisitsForDoctorResponseDto,
   Visit,
 } from "@medicup/shared";
-import { Box, Stack, Typography } from "@mui/material";
+import { Box, Stack } from "@mui/material";
 import { useCallback, useContext, useEffect, useState } from "react";
 import { Api } from "../../../api";
 import StaticVisitsCalendar from "../../../components/visits/StaticVisitsCalendar";
@@ -74,7 +74,6 @@ export default function DoctorHome() {
 
   return (
     <Stack height="100%">
-      <Typography variant="h2">DoctorHome</Typography>
       <Box sx={{ width: "100%" }} flex={1} minHeight={0}>
         <StaticVisitsCalendar
           handleEventClick={handleEventClick}

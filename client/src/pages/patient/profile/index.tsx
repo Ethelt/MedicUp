@@ -7,11 +7,11 @@ import { LoadingButton } from "@mui/lab";
 import { Stack, TextField } from "@mui/material";
 import { useForm } from "@tanstack/react-form";
 import { useContext } from "react";
+import { useNavigate } from "react-router";
 import { Api } from "../../../api";
 import { ErrorText } from "../../../components/ErrorText";
-import { PatientContext } from "../../../context/PatientContext";
 import { AppRoutes } from "../../../constants/AppRoutes";
-import { useNavigate } from "react-router";
+import { PatientContext } from "../../../context/PatientContext";
 
 // @Task: wyświetlanie i edycja profilu pacjenta; na razie tylko wygląd
 // nie musisz zmieniać nic poza tym plikiem
