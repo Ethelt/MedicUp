@@ -76,11 +76,11 @@ export default function PatientLayout() {
                   transition: "color 0.3s ease",
                 }}
                 onMouseEnter={(e) => {
-                  const target = e.target as HTMLElement; // Type assertion
+                  const target = e.target as HTMLElement;
                   target.style.color = "blue";
                 }}
                 onMouseLeave={(e) => {
-                  const target = e.target as HTMLElement; // Type assertion
+                  const target = e.target as HTMLElement;
                   target.style.color = "black";
                 }}
               >
@@ -88,8 +88,8 @@ export default function PatientLayout() {
                   sx={{
                     display: "inline-block",
                     padding: "5px 10px",
-                    backgroundColor: "rgba(0, 0, 0, 0.1)", // Faint grey background
-                    borderRadius: "5px", // Optional: rounded corners
+                    backgroundColor: "rgba(0, 0, 0, 0.1)",
+                    borderRadius: "5px",
                   }}
                 >
                   Kalendarz Wizyt
@@ -105,11 +105,11 @@ export default function PatientLayout() {
                   transition: "color 0.3s ease",
                 }}
                 onMouseEnter={(e) => {
-                  const target = e.target as HTMLElement; // Type assertion
+                  const target = e.target as HTMLElement;
                   target.style.color = "blue";
                 }}
                 onMouseLeave={(e) => {
-                  const target = e.target as HTMLElement; // Type assertion
+                  const target = e.target as HTMLElement;
                   target.style.color = "black";
                 }}
               >
@@ -117,8 +117,8 @@ export default function PatientLayout() {
                   sx={{
                     display: "inline-block",
                     padding: "5px 10px",
-                    backgroundColor: "rgba(0, 0, 0, 0.1)", // Faint grey background
-                    borderRadius: "5px", // Optional: rounded corners
+                    backgroundColor: "rgba(0, 0, 0, 0.1)",
+                    borderRadius: "5px",
                   }}
                 >
                   Mój Profil
