@@ -4,7 +4,7 @@ import { ValidationError } from "@tanstack/react-form";
 export const ErrorText = ({ errors }: { errors: ValidationError[] }) => {
   return (
     <Box mt={0.5} mb={1}>
-      {errors.length ? (
+      {errors.length && errors.join("").length ? (
         <Typography fontSize={14} color="error">
           {errors.join(", ")}
         </Typography>

@@ -45,7 +45,13 @@ export default function VisitCard(props: VisitCardProps) {
   };
 
   return (
-    <Stack spacing={1} border="1px solid" borderRadius={1} p={2}>
+    <Stack
+      spacing={1}
+      border="1px solid"
+      borderRadius={1}
+      p={2}
+      minHeight={300}
+    >
       <Typography variant="h6">
         {format(props.visit.startAt, "dd.MM.yyyy")} - dr.{" "}
         {props.visit.doctor.firstName} {props.visit.doctor.lastName}

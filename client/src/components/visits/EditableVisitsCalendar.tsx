@@ -90,6 +90,9 @@ export default function EditableVisitsCalendar(
         month: "short",
         omitCommas: true,
       }}
+      buttonText={{
+        today: "Dzisiaj",
+      }}
       selectConstraint={{ startTime: "06:00:00", endTime: "20:00:00" }}
       locale="pl"
       editable={true}
