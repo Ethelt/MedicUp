@@ -24,7 +24,8 @@ export default function StaticVisitsCalendar(props: StaticVisitsCalendarProps) {
 
   return (
     <FullCalendar
-      height={"100%"}
+      height={"300%"}
+      expandRows={true}
       plugins={[timeGridPlugin, interactionPlugin]}
       duration={{ week: 1 }}
       allDaySlot={false}

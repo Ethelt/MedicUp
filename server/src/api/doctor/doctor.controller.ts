@@ -15,6 +15,12 @@ export class DoctorController {
     app.get(ApiRoutes.doctor.me, this.getMe);
     app.get(ApiRoutes.doctor.available, this.getAvailbleDoctorsInPeriod);
     app.get(ApiRoutes.doctor.visits, this.getVisitsForDoctor);
+    app.get(ApiRoutes.doctor.root, this.getAll);
+  }
+
+  private static async getAll(req: Request, res: Response) {
+    const doctors = await DoctorService.getAll();
+    res.json({ doctors });
   }
 
   private static async getMe(req: Request, res: Response) {

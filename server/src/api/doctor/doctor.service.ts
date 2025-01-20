@@ -5,6 +5,12 @@ import { Database } from "../../database/database";
 import { removeDoctorSensitiveData } from "../../utils/sensitive-data";
 
 export class DoctorService {
+  static async getAll(): Promise<Doctor[]> {
+    const db = Database.getInstance();
+    const doctors = await db.selectFrom("doctor").selectAll().execute();
+    return doctors.map(removeDoctorSensitiveData);
+  }
+
   static async getMe(session: SessionData): Promise<Doctor> {
     const db = Database.getInstance();
     const doctor = await db

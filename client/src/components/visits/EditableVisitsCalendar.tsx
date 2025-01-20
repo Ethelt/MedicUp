@@ -4,11 +4,19 @@ import FullCalendar from "@fullcalendar/react";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import {
   ApiRoutes,
+  Doctor,
   GetVisitsForDoctorRequestDto,
   GetVisitsForDoctorResponseDto,
   Visit,
 } from "@medicup/shared";
-import { useCallback, useMemo, useState } from "react";
+import {
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  Stack,
+} from "@mui/material";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Api } from "../../api";
 
 type EditableVisitsCalendarProps = {
@@ -21,6 +29,22 @@ type EditableVisitsCalendarProps = {
 export default function EditableVisitsCalendar(
   props: EditableVisitsCalendarProps
 ) {
+  const [selectedDoctor, setSelectedDoctor] = useState<Doctor | null>(null);
+
+  const [doctors, setDoctors] = useState<Doctor[]>([]);
+
+  useEffect(() => {
+    (async () => {
+      const response = await Api.get<undefined, { doctors: Doctor[] }>(
+        ApiRoutes.doctor.root,
+        undefined
+      );
+      if (response.ok) {
+        setDoctors(response.data.doctors);
+      }
+    })();
+  }, []);
+
   const events = useMemo(
     () =>
       props.visits.map((visit) => ({
@@ -69,67 +93,108 @@ export default function EditableVisitsCalendar(
     return [...backgroundEvents, ...events];
   }, [backgroundEvents, events]);
 
+  const selectDoctor = useCallback(
+    async (doctorId: number) => {
+      setSelectedDoctor(doctors.find((d) => d.id === doctorId)!);
+      await loadDoctorVisits(doctorId);
+    },
+    [doctors, loadDoctorVisits]
+  );
+
   return (
-    <FullCalendar
-      height={"100%"}
-      plugins={[timeGridPlugin, interactionPlugin]}
-      duration={{ week: 1 }}
-      allDaySlot={false}
-      slotMinTime={"06:00:00"}
-      slotMaxTime={"20:00:00"}
-      firstDay={1}
-      initialView="timeGrid"
-      slotLabelFormat={{
-        hour: "2-digit",
-        minute: "2-digit",
-        hour12: false,
-      }}
-      dayHeaderFormat={{
-        weekday: "short",
-        day: "numeric",
-        month: "short",
-        omitCommas: true,
-      }}
-      buttonText={{
-        today: "Dzisiaj",
-      }}
-      selectConstraint={{ startTime: "06:00:00", endTime: "20:00:00" }}
-      locale="pl"
-      editable={true}
-      selectable={true}
-      select={(e) => props.handleEventAdd(e.start, e.end, e.view.calendar)}
-      eventChange={(e) => {
-        const visit = props.visits.find(
-          (visit) => visit.id.toString() === e.event.id
-        );
-        if (visit) {
-          props.handleEventChange(visit, e.event.start!, e.event.end!);
-        }
-      }}
-      eventClick={(e) => {
-        const visit = props.visits.find(
-          (visit) => visit.id.toString() === e.event.id
-        );
-        if (visit && !visit.cancelledAt) {
-          props.handleEventClick(visit);
-        }
-      }}
-      eventDragStart={(e) => {
-        const visit = props.visits.find(
-          (visit) => visit.id.toString() === e.event.id
-        );
-        if (visit) {
-          loadDoctorVisits(visit.doctor.id);
-        }
-      }}
-      eventDragStop={() => {
-        setDoctorVisits([]);
-      }}
-      eventResizableFromStart={true}
-      eventOverlap={disallowNonCancelledOverlap}
-      selectOverlap={disallowNonCancelledOverlap}
-      events={allEvents}
-    />
+    <Stack height="100%" width="100%">
+      <FormControl sx={{ my: 2, mx: 2 }}>
+        <InputLabel
+          sx={{ backgroundColor: "white", pr: 1 }}
+          id="doctor-select-label"
+        >
+          Sprawdź dostępność lekarza
+        </InputLabel>
+        <Select
+          labelId="doctor-select-label"
+          value={selectedDoctor?.id || ""}
+          onChange={async (e) => {
+            const doctorId = e.target.value as number;
+            if (doctorId) {
+              await selectDoctor(doctorId);
+            }
+          }}
+          label="Lekarz"
+        >
+          {doctors.map((doctor) => (
+            <MenuItem key={doctor.id} value={doctor.id}>
+              {doctor.firstName} {doctor.lastName}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+      <FullCalendar
+        // height={"300%"}
+        contentHeight={2000}
+        expandRows={true}
+        plugins={[timeGridPlugin, interactionPlugin]}
+        duration={{ week: 1 }}
+        allDaySlot={false}
+        slotMinTime={"06:00:00"}
+        slotMaxTime={"20:00:00"}
+        firstDay={1}
+        slotDuration={"00:30:00"}
+        initialView="timeGrid"
+        slotLabelFormat={{
+          hour: "2-digit",
+          minute: "2-digit",
+          hour12: false,
+        }}
+        dayHeaderFormat={{
+          weekday: "short",
+          day: "numeric",
+          month: "short",
+          omitCommas: true,
+        }}
+        buttonText={{
+          today: "Dzisiaj",
+        }}
+        selectConstraint={{ startTime: "06:00:00", endTime: "20:00:00" }}
+        locale="pl"
+        editable={true}
+        selectable={true}
+        select={(e) => props.handleEventAdd(e.start, e.end, e.view.calendar)}
+        eventChange={(e) => {
+          const visit = props.visits.find(
+            (visit) => visit.id.toString() === e.event.id
+          );
+          if (visit) {
+            props.handleEventChange(visit, e.event.start!, e.event.end!);
+          }
+        }}
+        eventClick={(e) => {
+          const visit = props.visits.find(
+            (visit) => visit.id.toString() === e.event.id
+          );
+          if (visit && !visit.cancelledAt) {
+            props.handleEventClick(visit);
+          }
+        }}
+        eventDragStart={(e) => {
+          const visit = props.visits.find(
+            (visit) => visit.id.toString() === e.event.id
+          );
+          if (visit) {
+            selectDoctor(visit.doctor.id);
+          }
+        }}
+        eventDragStop={() => {
+          setSelectedDoctor(null);
+          setDoctorVisits([]);
+        }}
+        eventResizableFromStart={true}
+        eventOverlap={disallowNonCancelledOverlap}
+        selectOverlap={disallowNonCancelledOverlap}
+        events={allEvents}
+        eventAllow={(e) => e.start >= new Date()}
+        selectAllow={(e) => e.start >= new Date()}
+      />
+    </Stack>
   );
 }
 

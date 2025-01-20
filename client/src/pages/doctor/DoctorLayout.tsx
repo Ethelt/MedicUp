@@ -2,7 +2,7 @@ import { ApiRoutes, Doctor } from "@medicup/shared";
 import { Instagram, LinkedIn, Twitter, YouTube } from "@mui/icons-material";
 import { Box, Button, Stack, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
-import { Outlet, useNavigate } from "react-router";
+import { Link, Outlet, useNavigate } from "react-router";
 import { Api } from "../../api";
 import { AppRoutes } from "../../constants/AppRoutes";
 import { DoctorContext } from "../../context/DoctorContext";
@@ -13,7 +13,10 @@ export default function DoctorLayout() {
 
   useEffect(() => {
     const fetchDoctor = async () => {
-      const response = await Api.get<undefined, Doctor>(ApiRoutes.doctor.me, undefined);
+      const response = await Api.get<undefined, Doctor>(
+        ApiRoutes.doctor.me,
+        undefined
+      );
       if (response.ok) {
         setDoctor(response.data);
       } else {
@@ -42,29 +45,35 @@ export default function DoctorLayout() {
           borderRadius={1}
         >
           {/* Logo */}
-          <svg
-            width="70px"
-            height="70px"
-            viewBox="0 0 193 229"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <g>
-              <path
-                style={{
-                  fill: "#3765ff",
-                  fillOpacity: 1,
-                  strokeWidth: 0.264583,
-                }}
-                d="M 0.3001292,75.380593 H 37.953427 L 57.972755,0.667449 109.93747,194.60242 138.49254,88.03344 h 55.06891 v 7.71067 H 145.53428 L 109.69998,229.47956 57.942579,36.318323 45.251496,83.68209 H 0.3001292 Z"
-              />
-            </g>
-          </svg>
+          <Link to={AppRoutes.doctor.home}>
+            <svg
+              width="70px"
+              height="70px"
+              viewBox="0 0 193 229"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <g>
+                <path
+                  style={{
+                    fill: "#3765ff",
+                    fillOpacity: 1,
+                    strokeWidth: 0.264583,
+                  }}
+                  d="M 0.3001292,75.380593 H 37.953427 L 57.972755,0.667449 109.93747,194.60242 138.49254,88.03344 h 55.06891 v 7.71067 H 145.53428 L 109.69998,229.47956 57.942579,36.318323 45.251496,83.68209 H 0.3001292 Z"
+                />
+              </g>
+            </svg>
+          </Link>
 
           {/* Buttons */}
           <Stack direction="row" gap={2} alignItems="center">
             <Button
               variant="contained"
-              sx={{ backgroundColor: "black", color: "white", '&:hover': { backgroundColor: "#333" } }}
+              sx={{
+                backgroundColor: "black",
+                color: "white",
+                "&:hover": { backgroundColor: "#333" },
+              }}
               onClick={handleLogout}
             >
               Wyloguj
@@ -72,7 +81,12 @@ export default function DoctorLayout() {
           </Stack>
         </Stack>
 
-        <Box flexGrow={1} overflow="auto" position="relative" paddingBottom="50px">
+        <Box
+          flexGrow={1}
+          overflow="auto"
+          position="relative"
+          paddingBottom="50px"
+        >
           <Outlet />
         </Box>
 
@@ -115,7 +129,9 @@ function Footer() {
         <Typography variant="subtitle2" sx={{ fontWeight: "bold" }}>
           Kontakt
         </Typography>
-        <Typography sx={{ fontSize: "12px" }}>adres.biuro@example.com</Typography>
+        <Typography sx={{ fontSize: "12px" }}>
+          adres.biuro@example.com
+        </Typography>
         <Typography sx={{ fontSize: "12px" }}>+48 111 222 333</Typography>
       </Box>
 

@@ -189,6 +189,38 @@ export default function Register() {
             if (!/^\d{11}$/.test(value.value)) {
               return "Nieprawidłowy numer PESEL";
             }
+
+            // Validate PESEL checksum
+            const weights = [1, 3, 7, 9, 1, 3, 7, 9, 1, 3];
+            const digits = value.value.split("").map(Number);
+            const checksum = digits.slice(0, 10).reduce((sum, digit, index) => {
+              return sum + digit * weights[index];
+            }, 0);
+            const expectedCheckDigit = (10 - (checksum % 10)) % 10;
+
+            if (digits[10] !== expectedCheckDigit) {
+              return "Nieprawidłowy numer PESEL - błędna suma kontrolna";
+            }
+
+            // Validate birth date encoded in PESEL
+            let month = parseInt(value.value.substring(2, 4));
+            const day = parseInt(value.value.substring(4, 6));
+
+            // Determine century from month
+            if (month > 80) {
+              month -= 80; // 1800s
+            } else if (month > 60) {
+              month -= 60; // 2200s
+            } else if (month > 40) {
+              month -= 40; // 2100s
+            } else if (month > 20) {
+              month -= 20; // 2000s
+            }
+            // else 1900s
+
+            if (month < 1 || month > 12 || day < 1 || day > 31) {
+              return "Nieprawidłowy numer PESEL - błędna data urodzenia";
+            }
           },
         }}
         children={(field) =>
