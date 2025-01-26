@@ -15,7 +15,11 @@ export default function Welcome() {
         >
             {/* Header Section */}
             <Stack direction="column" alignItems="center" spacing={2}>
-                <Typography variant="h5" fontWeight="medium">
+                <Typography
+                    variant="h5"
+                    fontWeight="bold"
+                    sx={{ fontSize: "1.5rem" }}
+                >
                     Dzień dobry, witamy w
                 </Typography>
                 <Stack direction="row" alignItems="center" spacing={2}>
@@ -69,20 +73,31 @@ export default function Welcome() {
             </Stack>
 
             {/* Buttons Section */}
-            <Stack spacing={2} alignItems="center">
-                <LoadingButton
-                    variant="contained"
-                    onClick={() => navigate(AppRoutes.auth.login.patient)}
-                >
-                    Login
-                </LoadingButton>
-                <LoadingButton
-                    variant="contained"
-                    onClick={() => navigate(AppRoutes.auth.register)}
-                >
-                    Register
-                </LoadingButton>
-            </Stack>
+            <Box
+                sx={{
+                    backgroundColor: "#f9f9f9",
+                    padding: 3,
+                    borderRadius: 2,
+                    boxShadow: "0 2px 5px rgba(0,0,0,0.1)",
+                }}
+            >
+                <Stack spacing={2} alignItems="center" width="300px">
+                    <LoadingButton
+                        fullWidth
+                        variant="contained"
+                        onClick={() => navigate(AppRoutes.auth.login.patient)}
+                    >
+                        Zaloguj się
+                    </LoadingButton>
+                    <LoadingButton
+                        fullWidth
+                        variant="contained"
+                        onClick={() => navigate(AppRoutes.auth.register)}
+                    >
+                        Rejestracja
+                    </LoadingButton>
+                </Stack>
+            </Box>
         </Stack>
     );
 }
