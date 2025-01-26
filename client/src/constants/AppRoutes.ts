@@ -1,5 +1,6 @@
 export const AppRoutes = {
   home: "/",
+  welcome: "/welcome",
   auth: {
     login: {
       patient: "/login/patient",

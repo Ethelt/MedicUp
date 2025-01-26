@@ -15,12 +15,14 @@ import PatientProfile from "./pages/patient/profile";
 import RegistrarHome from "./pages/registrar/home";
 import RegistrarPatientView from "./pages/registrar/patient-view";
 import RegistrarLayout from "./pages/registrar/RegistrarLayout";
+import Welcome from "./pages/Welcome";
 
 export function Router() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path={AppRoutes.home} element={<App />} />
+        <Route path={AppRoutes.welcome} element={<Welcome />} />
         <Route element={<AuthLayout />}>
           <Route path={AppRoutes.auth.register} element={<Register />} />
           <Route
