@@ -21,8 +21,8 @@ export default function PatientLogin() {
 
   const form = useForm<PatientLoginForm>({
     defaultValues: {
-      email: "bartek@test.com",
-      password: "Test1234!",
+      email: "",
+      password: "",
     },
     onSubmit: async (values) => {
       const response = await Api.post<

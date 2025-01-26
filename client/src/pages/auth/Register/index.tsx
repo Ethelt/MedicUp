@@ -30,14 +30,14 @@ export default function Register() {
 
   const form = useForm<RegisterForm>({
     defaultValues: {
-      email: "bartek@test.com",
-      password: "Test1234!",
-      confirmPassword: "Test1234!",
-      firstName: "Adam",
-      lastName: "Kowalski",
-      pesel: "12345678901",
+      email: "",
+      password: "",
+      confirmPassword: "",
+      firstName: "",
+      lastName: "",
+      pesel: "",
       passportNumber: "",
-      phoneNumber: "123456789",
+      phoneNumber: "",
       identityMethod: "pesel",
     },
     onSubmit: async (values) => {
@@ -142,6 +142,56 @@ export default function Register() {
               label="Email"
             />
 
+            <ErrorText errors={field.state.meta.errors} />
+          </>
+        )}
+      />
+
+      <form.Field
+        name="firstName"
+        validators={{
+          onChange: (value) => {
+            if (!value.value) {
+              return "Imię jest wymagane";
+            }
+            if (!/^[A-ZĄĆĘŁŃÓŚŹŻ][a-ząćęłńóśźż]{1,}$/.test(value.value)) {
+              return "Nieprawidłowe imię";
+            }
+          },
+        }}
+        children={(field) => (
+          <>
+            <TextField
+              value={field.state.value}
+              onBlur={field.handleBlur}
+              onChange={(e) => field.handleChange(e.target.value)}
+              label="Imię"
+            />
+            <ErrorText errors={field.state.meta.errors} />
+          </>
+        )}
+      />
+
+      <form.Field
+        name="lastName"
+        validators={{
+          onChange: (value) => {
+            if (!value.value) {
+              return "Nazwisko jest wymagane";
+            }
+            if (!/^[A-ZĄĆĘŁŃÓŚŹŻ][a-ząćęłńóśźż]{1,}$/.test(value.value)) {
+              return "Nieprawidłowe nazwisko";
+            }
+          },
+        }}
+        children={(field) => (
+          <>
+            <TextField
+              value={field.state.value}
+              onBlur={field.handleBlur}
+              onChange={(e) => field.handleChange(e.target.value)}
+              label="Nazwisko"
+            />
             <ErrorText errors={field.state.meta.errors} />
           </>
         )}

@@ -8,7 +8,7 @@ export default function App() {
 
   // @TODO: add proper redirect
   useEffect(() => {
-    navigate(AppRoutes.auth.login.patient);
+    navigate(AppRoutes.welcome);
   }, [navigate]);
 
   return <Typography variant="h1">Waiting for redirect...</Typography>;
